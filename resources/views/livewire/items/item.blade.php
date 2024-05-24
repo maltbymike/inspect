@@ -7,7 +7,12 @@
     
     <x-main-content-box>
         <x-content-box-section>
-            Test
+            <div class="grid grid-cols-2 gap-4">
+                @foreach ($items as $item)
+                    <div>{{ $item->reference }}</div>
+                    <div>{{ $item->name }}</div>
+                @endforeach
+            </div>
         </x-content-box-section>
     </x-main-content-box>
 </div>

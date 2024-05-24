@@ -8,6 +8,8 @@ class Item extends Component
 {
     public function render()
     {
-        return view('livewire.items.item');
+        return view('livewire.items.item', [
+            'items' => \App\Models\Items\Item::all(),
+        ]);
     }
 }
