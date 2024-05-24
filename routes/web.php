@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Items\Item;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,5 +15,5 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    
+    Route::get('/items', Item::class)->name('items');
 });
