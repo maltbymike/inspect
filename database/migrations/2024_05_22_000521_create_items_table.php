@@ -15,13 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('reference', 30);
             $table->string('name', 255);
-            $table->foreignId('parent_id')
-                ->nullable()
-                ->constrained(table: 'products')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
-            $table->boolean('is_header')
-                ->default(false);
             $table->timestamps();
         });
     }
