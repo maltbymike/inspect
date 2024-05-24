@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('parent_id');
             $table->foreign('parent_id')
                 ->references('id')
-                ->on('items_parent_child');
+                ->on('items');
             $table->foreignId('child_id');
             $table->foreign('child_id')
                 ->references('id')
-                ->on('items_parent_child');
+                ->on('items');
             $table->timestamps();
         });
     }
