@@ -16,7 +16,7 @@ class Item extends Model
     {
         return $this->belongsToMany(
             Item::class, 
-            'item_parent_child',
+            'items_parent_child',
             'parent_id',
             'child_id',
         );
@@ -26,7 +26,7 @@ class Item extends Model
     {
         return $this->belongsToMany(
             Item::class, 
-            'item_parent_child',
+            'items_parent_child',
             'child_id',
             'parent_id',
         );
