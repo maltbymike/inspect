@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Items;
 
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Filament\Forms\Contracts\HasForms;
@@ -27,7 +30,11 @@ class Item extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                // ...
+                ViewAction::make()
+                    ->form([
+                        TextInput::make('reference'),
+                        TextInput::make('name'),
+                    ])
             ])
             ->bulkActions([
                 // ...
