@@ -4,6 +4,7 @@ namespace App\Livewire\Items;
 
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Livewire\Component;
 use Filament\Tables\Table;
@@ -18,6 +19,26 @@ class Item extends Component implements HasForms, HasTable
     use InteractsWithForms;
     use InteractsWithTable;
 
+    protected function itemInspectionForm(): array
+    {
+        return [
+            TextInput::make('reference')
+                ->string()
+                ->required(),
+            TextInput::make('name')
+                ->string()
+                ->required(),
+            Repeater::make('inspectionTemplates')
+                ->relationship()
+                ->simple(
+                    TextInput::make('name')
+                        ->string()
+                        ->required(),
+                )
+        ];
+        
+    }
+
     public function table(Table $table): Table
     {
         return $table
@@ -31,21 +52,13 @@ class Item extends Component implements HasForms, HasTable
             ])
             ->actions([
                 ViewAction::make()
-                    ->form([
-                        TextInput::make('reference')
-                            ->string()
-                            ->required(),
-                        TextInput::make('name')
-                            ->string()
-                            ->required(),
-                        Repeater::make('inspectionTemplates')
-                            ->relationship()
-                            ->simple(
-                                TextInput::make('name')
-                                    ->string()
-                                    ->required(),
-                            )
-                    ])
+                    ->form(
+                        $this->itemInspectionForm()
+                    ),
+                EditAction::make()
+                    ->form(
+                        $this->itemInspectionForm()
+                    ),
             ])
             ->bulkActions([
                 // ...
