@@ -2,6 +2,7 @@
 
 namespace App\Models\Items;
 
+use App\Models\Items\Inspections\Template;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +21,11 @@ class Item extends Model
             'parent_id',
             'child_id',
         );
+    }
+
+    public function inspectionTemplates(): HasMany
+    {
+        return $this->hasMany(Template::class);
     }
 
     public function parents(): BelongsToMany
