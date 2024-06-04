@@ -13,6 +13,16 @@ class Item extends Model
 {
     use HasFactory;
 
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Item::class,
+            'item_category_item',
+            'item_id',
+            'category_id',
+        );
+    }
+
     public function children(): BelongsToMany
     {
         return $this->belongsToMany(

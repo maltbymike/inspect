@@ -15,6 +15,33 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <div class="ms-3 relative inline-flex items-center">
+                        <x-dropdown align="left" width="60">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        {{ __('Items') }}
+                                    </button>
+                                </span>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <div class="w-60">
+                                    <!-- Items -->
+                                    <x-dropdown-link href="{{ route('items') }}">
+                                        {{ __('Show Items') }}
+                                    </x-dropdown-link>
+                                    
+                                    <!-- Categories -->
+                                    <x-dropdown-link href="{{ route('item_categories') }}">
+                                        {{ __('Show Categories') }}
+                                    </x-dropdown-link>
+                                </div>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+                    
                     <x-nav-link href="{{ route('items') }}" :active="request()->routeIs('items')">
                         {{ __('Items') }}
                     </x-nav-link>

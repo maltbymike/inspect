@@ -14,6 +14,7 @@ class DevSeeder extends Seeder
     {
         $this->call([
             DevUserSeeder::class,
+            DevItemCategorySeeder::class,
             DevItemSeeder::class,
         ]);
     }
