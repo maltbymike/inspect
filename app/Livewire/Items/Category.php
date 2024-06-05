@@ -90,8 +90,15 @@ class Category extends Component implements HasForms, HasTable
 
     public function render()
     {
+        if($this->category->exists) {
+            $categoryCount = $this->category->children()->get()->count();
+        } else {
+            $categoryCount = \App\Models\Items\Category::where('is_root', true)->get()->count();
+        }
+
         return view('livewire.items.category', [
             'categories' => \App\Models\Items\Category::all(),
+            'showCategory' => $categoryCount > 0 ? true : false,
         ]);
     }
 }
