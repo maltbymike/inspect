@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Items;
 
+use App\Models\Items\Category;
+use App\Models\Items\CategoryParentChild;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Livewire\Component;
 use Filament\Tables\Table;
@@ -21,6 +24,27 @@ class Item extends Component implements HasForms, HasTable
     use InteractsWithTable;
 
     public $category;
+
+    protected function getSubcategoryIds(int $categoryId, Collection $pivotCollection, bool $includeCategory = false)
+    {
+        $subcategories = $pivotCollection->where('parent_id', $categoryId)
+                                            ->pluck('child_id');
+        
+        foreach ($subcategories as $subcategory) {
+            $subcategories->push(
+                $this->getSubcategoryIds(
+                    categoryId: $subcategory, 
+                    pivotCollection: $pivotCollection
+                )
+            );
+        }
+
+        if ($includeCategory) {
+            $subcategories->push($categoryId);
+        }
+
+        return $subcategories->flatten()->all();
+    }
 
     protected function itemInspectionForm(): array
     {
@@ -49,11 +73,21 @@ class Item extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        if (is_null($this->category)) {
+        if (! $this->category || ! $this->category->exists) {
             $table->query(\App\Models\Items\Item::query());
         } else {
-            $table->relationship(fn (): BelongsToMany => $this->category->items())
-                ->inverseRelationship('categories');
+            $categoryParentChild = CategoryParentChild::all();
+
+            $subcategories = $this->getSubcategoryIds(
+                categoryId: $this->category->id, 
+                pivotCollection: $categoryParentChild,
+                includeCategory: true,
+            );
+
+            $table->query(\App\Models\Items\Item::whereHas('categories', function($query) use ($subcategories) {
+                $query->whereIn('item_category_item.category_id', $subcategories);
+            }));
+
         }
 
         return $table
@@ -81,13 +115,8 @@ class Item extends Component implements HasForms, HasTable
 
     public function render()
     {
-        if (! is_null($this->category)) {
-            $itemCount = $this->category->items()->get()->count();
-        }
-
         return view('livewire.items.item', [
             'items' => \App\Models\Items\Item::all(),
-            'showItems' => $itemCount ?? true,
         ]);
     }
 }
