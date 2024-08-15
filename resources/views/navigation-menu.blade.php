@@ -2,7 +2,7 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex items-center ms-6">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
@@ -16,20 +16,23 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <div class="ms-3 relative inline-flex items-center">
+                    <div class="ms-3 relative">
                         <x-dropdown align="left" width="60">
                             <x-slot name="trigger">
-                                <x-nav-link>
-                                    {{ __('Items') }}
+                                <span class="inline-flex rounded-md">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        {{ __('Items') }}
 
-                                    <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                         </svg>
-                                </x-nav-link>
+                                    </button>
+                                </span>
                             </x-slot>
 
                             <x-slot name="content">
                                 <div class="w-60">
+                                
                                     <!-- Items -->
                                     <x-dropdown-link href="{{ route('items') }}">
                                         {{ __('Show Items') }}
@@ -39,6 +42,17 @@
                                     <x-dropdown-link href="{{ route('item_categories') }}">
                                         {{ __('Show Categories') }}
                                     </x-dropdown-link>
+
+                                    <!-- Inspections Management -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Inspections') }}
+                                    </div>
+
+                                    <!-- Inspections -->
+                                    <x-dropdown-link href="{{ route('item_inspections_template') }}">
+                                        {{ __('Inspection Templates') }}
+                                    </x-dropdown-link>
+                                    
                                 </div>
                             </x-slot>
                         </x-dropdown>
