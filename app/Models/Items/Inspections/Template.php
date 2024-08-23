@@ -11,6 +11,8 @@ class Template extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+    
     protected $table = 'item_inspection_templates';
 
     public function item(): BelongsTo
