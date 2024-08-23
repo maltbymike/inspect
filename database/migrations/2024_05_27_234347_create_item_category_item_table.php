@@ -15,8 +15,14 @@ return new class extends Migration
     {
         Schema::create('item_category_item', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Item::class);
-            $table->foreignIdFor(Category::class);
+            $table->foreignId('item_id');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('items');
+            $table->foreignId('category_id');
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('item_categories');
             $table->timestamps();
         });
     }

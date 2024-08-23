@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name', 150);
             $table->longText('description')
                 ->nullable();
-            $table->foreignIdFor(Item::class);
             $table->timestamps();
         });
     }
