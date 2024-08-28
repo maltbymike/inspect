@@ -2,21 +2,24 @@
 
 namespace App\Livewire\Items;
 
-use App\Models\Items\Category;
-use App\Models\Items\CategoryParentChild;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Livewire\Component;
 use Filament\Tables\Table;
+use App\Models\Items\Category;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Repeater;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TextInput;
+use App\Models\Items\CategoryParentChild;
+use Filament\Forms\Components\Placeholder;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Item extends Component implements HasForms, HasTable
 {
@@ -58,9 +61,28 @@ class Item extends Component implements HasForms, HasTable
             Repeater::make('inspectionTemplates')
                 ->relationship()
                 ->simple(
-                    TextInput::make('name')
-                        ->string()
-                        ->required(),
+                    Select::make('template_id')
+                        ->relationship(name: 'template', titleAttribute: 'name')
+                        ->createOptionForm([
+                            TextInput::make('name')
+                                ->required(),
+                        ]),
+                ),
+            Repeater::make('inspectionTemplatesFromParents')
+                ->label('Inspection Templates from Parents')
+                ->addable(false)
+                ->deletable(false)
+                ->relationship()
+                ->simple(
+                    Repeater::make('inspectionTemplates')
+                        ->addable(false)
+                        ->deletable(false)
+                        ->relationship()
+                        ->simple(
+                            Select::make('template_id')
+                                ->disabled()
+                                ->relationship(name: 'template', titleAttribute: 'name'),
+                        ),
                 )
         ];
         
