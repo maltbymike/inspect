@@ -12,8 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('item_inspections', function (Blueprint $table) {
+        Schema::create('item_item_inspection', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('item_id');
+            $table->foreign('item_id')
+                ->references('id')
+                ->on('items');
             $table->foreignId('item_template_id');
             $table->foreign('item_template_id')
                 ->references('id')

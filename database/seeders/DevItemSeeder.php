@@ -56,6 +56,9 @@ class DevItemSeeder extends Seeder
             ]);
 
             $item->categories()->attach($header['category']);
+            $item->templates()->create([
+                'name' => $header['name'] . ' header inspection',
+            ]);
         
             for ($i=1; $i < $header['children']; $i++) { 
                 $child = $item->children()->create([
@@ -64,6 +67,12 @@ class DevItemSeeder extends Seeder
                 ]);
 
                 $child->categories()->attach($header['category']);
+                $child->templates()->create([
+                    'name' => $header['name'] . ' child inspection 1',
+                ]);
+                $child->templates()->create([
+                    'name' => $header['name'] . ' child inspection 2',
+                ]);
             }
         }
     }
