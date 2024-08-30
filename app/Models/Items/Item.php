@@ -2,6 +2,7 @@
 
 namespace App\Models\Items;
 
+use App\Models\Items\Inspections\ItemInspection;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\Template;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,16 @@ class Item extends Model
         );
     }
 
+    public function inspections(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            ItemInspection::class,
+            'item_inspection',
+            'item_id',
+            'item_template_id',
+        );
+    }
+
     public function inspectionTemplates(): HasMany
     {
         return $this->hasMany(ItemTemplate::class);
@@ -54,6 +65,16 @@ class Item extends Model
             'items_parent_child',
             'child_id',
             'parent_id',
+        );
+    }
+
+    public function templates(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Template::class,
+            'item_template',
+            'item_id',
+            'template_id',
         );
     }
 }
