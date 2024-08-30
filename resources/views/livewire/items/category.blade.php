@@ -13,6 +13,6 @@
         </x-main-content-box>       
     @endif
 
-    <livewire:items.list_items :$category>
+    <livewire:items.list-items :$category>
 
 </div>

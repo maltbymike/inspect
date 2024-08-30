@@ -137,7 +137,7 @@ class ListItems extends Component implements HasForms, HasTable
 
     public function render()
     {
-        return view('livewire.items.list_items', [
+        return view('livewire.items.list-items', [
             'items' => \App\Models\Items\Item::all(),
         ]);
     }
