@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Items;
 
+use App\Models\Items\Item;
 use Livewire\Component;
+use Filament\Tables;
 use Filament\Tables\Table;
 use App\Models\Items\Category;
 use Filament\Forms\Components\Select;
@@ -121,6 +123,8 @@ class ListItems extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
+                Tables\Actions\Action::make('view-item')
+                    ->url(fn (Item $record): string => route('item', $record)),
                 ViewAction::make()
                     ->form(
                         $this->itemInspectionForm()

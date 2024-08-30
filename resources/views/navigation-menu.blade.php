@@ -34,7 +34,7 @@
                                 <div class="w-60">
                                 
                                     <!-- Items -->
-                                    <x-dropdown-link href="{{ route('items') }}">
+                                    <x-dropdown-link href="{{ route('list-items') }}">
                                         {{ __('Show Items') }}
                                     </x-dropdown-link>
                                     
