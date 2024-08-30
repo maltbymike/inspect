@@ -21,7 +21,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Item extends Component implements HasForms, HasTable
+class ListItems extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
@@ -137,7 +137,7 @@ class Item extends Component implements HasForms, HasTable
 
     public function render()
     {
-        return view('livewire.items.item', [
+        return view('livewire.items.list_items', [
             'items' => \App\Models\Items\Item::all(),
         ]);
     }
