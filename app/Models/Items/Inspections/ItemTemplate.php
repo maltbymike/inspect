@@ -16,7 +16,7 @@ class ItemTemplate extends Pivot
 
     public function inspections(): HasMany
     {
-        return $this->hasMany(ItemInspection::class);
+        return $this->hasMany(ItemInspection::class, 'item_template_id');
     }
 
     public function template(): BelongsTo

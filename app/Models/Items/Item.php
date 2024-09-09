@@ -38,13 +38,10 @@ class Item extends Model
         );
     }
 
-    public function inspections(): BelongsToMany
+    public function inspections(): HasMany
     {
-        return $this->belongsToMany(
-            ItemInspection::class,
-            'item_inspection',
-            'item_id',
-            'item_template_id',
+        return $this->hasMany(
+            ItemInspection::class
         );
     }
 
@@ -53,7 +50,7 @@ class Item extends Model
         return $this->hasMany(ItemTemplate::class);
     }
 
-    public function inspectionTemplatesFromParents()
+    public function inspectionTemplatesFromParents(): BelongsToMany
     {
         return $this->parents()->with('inspectionTemplates');
     }
