@@ -40,7 +40,10 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
-            ->plugin(\TomatoPHP\FilamentMediaManager\FilamentMediaManagerPlugin::make())
+            ->plugin(
+                \TomatoPHP\FilamentMediaManager\FilamentMediaManagerPlugin::make()
+                    ->allowSubFolders()
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

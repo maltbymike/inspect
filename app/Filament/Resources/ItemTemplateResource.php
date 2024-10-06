@@ -14,6 +14,7 @@ use App\Models\Items\Inspections\ItemInspection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ItemTemplateResource\Pages;
 use App\Filament\Resources\ItemTemplateResource\RelationManagers;
+use TomatoPHP\FilamentMediaManager\Form\MediaManagerInput;
 
 class ItemTemplateResource extends Resource
 {
@@ -37,6 +38,15 @@ class ItemTemplateResource extends Resource
                     ]),
                 Forms\Components\RichEditor::make('description')
                     ->columnSpanFull(),
+                MediaManagerInput::make('inspection_documents')
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('description')
+                            ->maxLength(255),
+                    ]),
+                
             ]);
     }
 
