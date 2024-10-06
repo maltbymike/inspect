@@ -39,6 +39,7 @@ return new class extends Migration
                 ->on('users');
             $table->timestamp('started_at')->nullable();
             $table->timestamp('completed_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }
