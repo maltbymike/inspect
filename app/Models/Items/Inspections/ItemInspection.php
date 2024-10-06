@@ -26,6 +26,26 @@ class ItemInspection extends Model
         return $this->belongsTo(User::class, 'completed_by_user_id');
     }
 
+    public function inspectionIsCompleted(): bool
+    {
+        return ! is_null($this->completed_at);
+    }
+
+    public function inspectionIsNotCompleted(): bool
+    {
+        return is_null($this->completed_at);
+    }
+
+    public function inspectionIsStarted(): bool
+    {
+        return ! is_null($this->started_at);
+    }
+
+    public function inspectionIsNotStarted(): bool
+    {
+        return is_null($this->started_at);
+    }
+
     public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class);
