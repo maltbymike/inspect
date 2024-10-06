@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\ItemResource\RelationManagers;
 
+use App\Filament\Resources\ItemTemplateResource;
+use Filament\Actions\StaticAction;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\Items\Inspections\ItemTemplate;
+use App\Models\Items\Inspections\ItemInspection;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class InspectionTemplatesRelationManager extends RelationManager
 {
@@ -16,34 +18,11 @@ class InspectionTemplatesRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('template_id')
-                    ->relationship(name: 'template', titleAttribute: 'name'),
-            ]);
+        return ItemTemplateResource::form($form);
     }
 
     public function table(Table $table): Table
     {
-        return $table
-            ->recordTitleAttribute('template.name')
-            ->columns([
-                Tables\Columns\TextColumn::make('template.name'),
-            ])
-            ->filters([
-                //
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+        return ItemTemplateResource::table($table);
     }
 }

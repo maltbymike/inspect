@@ -2,18 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\Items\Inspections\ItemInspection;
 use Filament\Forms;
-use Filament\Forms\Get;
 use Filament\Tables;
+use Filament\Actions;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use App\Models\Items\Item;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Actions;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ItemResource\Pages;
+use App\Models\Items\Inspections\ItemInspection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\ItemResource\RelationManagers;
 
 class ItemResource extends Resource
@@ -67,8 +68,10 @@ class ItemResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\InspectionTemplatesRelationManager::class,
-            RelationManagers\InspectionsRelationManager::class,
+            RelationGroup::make('Inspections', [
+                RelationManagers\InspectionsRelationManager::class,
+                RelationManagers\InspectionTemplatesRelationManager::class,
+            ])
         ];
     }
 
