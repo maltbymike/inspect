@@ -24,6 +24,8 @@ return new class extends Migration
             $table->foreign('template_id')
                 ->references('id')
                 ->on('item_inspection_templates');
+            $table->longText('description')
+                ->nullable();
             $table->timestamps();
         });
     }
