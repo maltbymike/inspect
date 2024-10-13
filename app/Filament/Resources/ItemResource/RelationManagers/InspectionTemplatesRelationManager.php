@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ItemResource\RelationManagers;
 
 use App\Filament\Resources\ItemTemplateResource;
+use App\Models\Items\Item;
 use Filament\Actions\StaticAction;
 use Filament\Forms;
 use Filament\Tables;
@@ -11,6 +12,7 @@ use Filament\Tables\Table;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
 use Filament\Resources\RelationManagers\RelationManager;
+use Illuminate\Database\Eloquent\Builder;
 
 class InspectionTemplatesRelationManager extends RelationManager
 {
@@ -23,6 +25,7 @@ class InspectionTemplatesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return ItemTemplateResource::table($table);
+        return ItemTemplateResource::table($table)
+            ->modifyQueryUsing(fn (Builder $query, RelationManager $livewire) => $query->orWhereIn('item_template.item_id', $livewire->getOwnerRecord()->itemAndParentsIdArray()));
     }
 }
