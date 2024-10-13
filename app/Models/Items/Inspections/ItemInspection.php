@@ -2,11 +2,11 @@
 
 namespace App\Models\Items\Inspections;
 
-use App\Models\Items\Item;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Items\Item;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ItemInspection extends Model
 {
@@ -49,11 +49,6 @@ class ItemInspection extends Model
     public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class);
-    }
-
-    public function template(): BelongsTo
-    {
-        return $this->belongsTo(Template::class);
     }
 
     public function itemTemplate(): BelongsTo
