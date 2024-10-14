@@ -55,6 +55,8 @@ class ItemResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('manageItem')
+                    ->url(fn ($record): string => route('filament.admin.pages.items.manage', ['id' => $record->id] )),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
