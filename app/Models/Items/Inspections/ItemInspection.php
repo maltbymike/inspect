@@ -16,6 +16,11 @@ class ItemInspection extends Model
 
     protected $table = 'item_item_inspection';
 
+    public function approvedByUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by_user_id');
+    }
+
     public function assignedToUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to_user_id');
