@@ -25,7 +25,6 @@ class InspectionTemplatesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return ItemTemplateResource::table($table)
-            ->modifyQueryUsing(fn (Builder $query, RelationManager $livewire) => $query->orWhereIn('item_template.item_id', $livewire->getOwnerRecord()->itemAndParentsIdArray()));
+        return ItemTemplateResource::table($table);
     }
 }
