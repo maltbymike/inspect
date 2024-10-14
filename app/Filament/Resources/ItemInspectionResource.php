@@ -9,9 +9,13 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Awcodes\Curator\Models\Media;
 use Illuminate\Support\Collection;
 use Filament\Tables\Grouping\Group;
+use Illuminate\Contracts\View\View;
 use Filament\Forms\Components\Livewire;
+use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\Component;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
@@ -58,7 +62,7 @@ class ItemInspectionResource extends Resource
                     Forms\Components\Actions\Action::make('startInspection')
                         ->color('success')
                         ->label(__('Start Inspection'))
-                        ->visible(fn (ItemInspection $record): bool => $record->inspectionIsNotStarted())
+                        ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsStarted())
                         ->action(
                             function (ItemInspection $record, Set $set): void {
                                 $record->started_at = now();
@@ -66,14 +70,43 @@ class ItemInspectionResource extends Resource
                                 $set('started_at', now()->toDateTimeString());
                             } 
                         ),
+                ])
+                ->columnSpanFull()
+                ->fullWidth(),
+                Forms\Components\Section::make('Inspection Information')
+                    ->relationship('itemTemplate')
+                    ->schema([
+                        Forms\Components\Repeater::make('documents')
+                            ->relationship('documents')
+                            ->grid(3)
+                            ->simple(
+                                Forms\Components\TextInput::make('title')
+                                    ->readOnly()
+                                    ->suffixAction(
+                                        Forms\Components\Actions\Action::make('viewDocument')
+                                            ->icon('heroicon-o-arrow-right-start-on-rectangle')
+                                            ->modalHeading(fn (Media $record): string => $record->title)
+                                            ->modalCancelAction(false)
+                                            ->modalSubmitAction(false)
+                                            ->modalContent(fn (Media $record): View => view(
+                                                'filament.pages.actions.embed-pdf',
+                                                ['record' => $record],
+                                            ))
+                                    )
+                            ),
+                        Forms\Components\RichEditor::make('description')
+                            ->toolbarButtons([]),
+                        
+                    ]),
+                Forms\Components\Actions::make([
                     Forms\Components\Actions\Action::make('completeInspection')
                         ->color('danger')
                         ->label(__('Complete Inspection'))
                         ->visible(
                             fn (ItemInspection $record): bool => 
-                                $record->inspectionIsNotCompleted() &&
                                 $record->inspectionIsStarted()
                         )
+                        ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsCompleted())
                         ->form([
                             Forms\Components\Select::make('completed_by')
                                 ->options(User::query()->pluck('name', 'id'))
@@ -137,6 +170,7 @@ class ItemInspectionResource extends Resource
                     ->default(false),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -158,6 +192,7 @@ class ItemInspectionResource extends Resource
         return [
             'index' => Pages\ListItemInspections::route('/'),
             'create' => Pages\CreateItemInspection::route('/create'),
+            'view' => Pages\ViewItemInspection::route('/{record}'),
             'edit' => Pages\EditItemInspection::route('/{record}/edit'),
         ];
     }

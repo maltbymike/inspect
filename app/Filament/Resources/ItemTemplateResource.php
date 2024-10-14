@@ -2,18 +2,18 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\ItemResource\RelationManagers\InspectionTemplatesRelationManager;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Actions\StaticAction;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Awcodes\Curator\Components\Forms\CuratorPicker;
 use App\Filament\Resources\ItemTemplateResource\Pages;
-use App\Filament\Resources\ItemTemplateResource\RelationManagers;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class ItemTemplateResource extends Resource
 {
@@ -28,6 +28,7 @@ class ItemTemplateResource extends Resource
                 Forms\Components\Select::make('item_id')
                     ->relationship(name: 'item', titleAttribute: 'name')
                     ->disabledOn('edit')
+                    ->default(fn (InspectionTemplatesRelationManager $livewire): int => $livewire->getOwnerRecord()->id)
                     ->required(),
                 Forms\Components\Select::make('template_id')
                     ->relationship(name: 'template', titleAttribute: 'name')
@@ -37,6 +38,10 @@ class ItemTemplateResource extends Resource
                     ]),
                 Forms\Components\RichEditor::make('description')
                     ->columnSpanFull(),
+                CuratorPicker::make('documents')
+                    ->multiple()
+                    ->relationship('documents', 'id')
+                    ->directory('inspection_documents'),
             ]);
     }
 
@@ -68,18 +73,28 @@ class ItemTemplateResource extends Resource
                         ->icon('heroicon-m-pencil-square')
                 ])
                 ->action(
-                    function (ItemTemplate $record, array $arguments): void {                        
+                    function (ItemTemplate $record, array $arguments, $livewire): void {                        
                         $inspection = new ItemInspection;
-                        $inspection->item_id = $record->item_id;
+                        if ($livewire instanceof InspectionTemplatesRelationManager) {
+                            $inspection->item_id = $livewire->getOwnerRecord()->id;
+                        } else {
+                            $inspection->item_id = $record->item_id;
+                        }
                         $inspection->item_template_id = $record->id;
                         $inspection->save();
 
                         if ($arguments['redirect'] ?? false) {
                             redirect()->route('filament.admin.resources.item-inspections.edit', ['record' => $inspection->id]);
+                        } else {
+                            redirect(request()->header('Referer'));
                         }
                     } 
                 ),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -100,6 +115,7 @@ class ItemTemplateResource extends Resource
         return [
             'index' => Pages\ListItemTemplates::route('/'),
             'create' => Pages\CreateItemTemplate::route('/create'),
+            'view' => Pages\ViewItemTemplate::route('/{record}'),
             'edit' => Pages\EditItemTemplate::route('/{record}/edit'),
         ];
     }
