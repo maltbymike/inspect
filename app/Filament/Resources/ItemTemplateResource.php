@@ -85,6 +85,8 @@ class ItemTemplateResource extends Resource
 
                         if ($arguments['redirect'] ?? false) {
                             redirect()->route('filament.admin.resources.item-inspections.edit', ['record' => $inspection->id]);
+                        } else {
+                            redirect(request()->header('Referer'));
                         }
                     } 
                 ),
