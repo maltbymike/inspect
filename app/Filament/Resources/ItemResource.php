@@ -55,9 +55,10 @@ class ItemResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\Action::make('manageItem')
-                    ->url(fn ($record): string => route('filament.admin.pages.items.manage', ['id' => $record->id] )),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\Action::make('view')
+                    ->icon('heroicon-m-eye')
+                    ->color('gray')
+                    ->url(fn ($record): string => route('filament.admin.pages.items.view', ['id' => $record->id] )),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -82,7 +83,6 @@ class ItemResource extends Resource
         return [
             'index' => Pages\ListItems::route('/'),
             'create' => Pages\CreateItem::route('/create'),
-            'view' => Pages\ViewItem::route('/{record}'),
             'edit' => Pages\EditItem::route('/{record}/edit'),
         ];
     }
