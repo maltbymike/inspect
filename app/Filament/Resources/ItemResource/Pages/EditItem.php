@@ -13,7 +13,8 @@ class EditItem extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
+            Actions\Action::make('view')
+                ->url(route('filament.admin.pages.items.view', ['id' => $this->record])),
             Actions\DeleteAction::make(),
         ];
     }
