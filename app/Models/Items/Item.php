@@ -9,12 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 
 class Item extends Model
 {
+    use HasGraphRelationships;
     use HasFactory;
 
     protected $guarded = [];
+
+    public function getPivotTableName(): string
+    {
+        return 'items_parent_child';
+    }
 
     public function categories(): BelongsToMany
     {
@@ -23,16 +30,6 @@ class Item extends Model
             'item_category_item',
             'item_id',
             'category_id',
-        );
-    }
-
-    public function children(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Item::class, 
-            'items_parent_child',
-            'parent_id',
-            'child_id',
         );
     }
 
@@ -59,16 +56,6 @@ class Item extends Model
             ->pluck('id')
             ->push($this->id)
             ->toArray();
-    }
-
-    public function parents(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Item::class, 
-            'items_parent_child',
-            'child_id',
-            'parent_id',
-        );
     }
 
     public function templates(): BelongsToMany
