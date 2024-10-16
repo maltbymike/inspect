@@ -59,7 +59,8 @@ class ItemResource extends Resource
                     ->icon('heroicon-m-eye')
                     ->color('gray')
                     ->url(fn ($record): string => route('filament.admin.pages.items.view', ['id' => $record->id] )),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->url(fn (Item $record): string => ItemResource::getUrl('edit', ['record' => $record])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -74,7 +75,11 @@ class ItemResource extends Resource
             RelationGroup::make('Inspections', [
                 RelationManagers\InspectionsRelationManager::class,
                 RelationManagers\InspectionTemplatesRelationManager::class,
-            ])
+            ]),
+            RelationGroup::make('Item Information', [
+                RelationManagers\ParentsRelationManager::class,
+                RelationManagers\ChildrenRelationManager::class,
+            ]),
         ];
     }
 
