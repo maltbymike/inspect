@@ -77,6 +77,7 @@ class ItemResource extends Resource
                 RelationManagers\InspectionTemplatesRelationManager::class,
             ]),
             RelationGroup::make('Item Information', [
+                RelationManagers\CategoriesRelationManager::class,
                 RelationManagers\ParentsRelationManager::class,
                 RelationManagers\ChildrenRelationManager::class,
             ]),
