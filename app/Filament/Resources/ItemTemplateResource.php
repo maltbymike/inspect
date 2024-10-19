@@ -19,6 +19,8 @@ class ItemTemplateResource extends Resource
 {
     protected static ?string $model = ItemTemplate::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+    
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -27,7 +29,7 @@ class ItemTemplateResource extends Resource
             ->schema([
                 Forms\Components\Select::make('item_id')
                     ->relationship(name: 'item', titleAttribute: 'name')
-                    ->disabledOn('edit')
+                    ->disabled()
                     ->default(fn (InspectionTemplatesRelationManager $livewire): int => $livewire->getOwnerRecord()->id)
                     ->required(),
                 Forms\Components\Select::make('template_id')
