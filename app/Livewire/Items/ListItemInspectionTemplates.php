@@ -41,7 +41,7 @@ class ListItemInspectionTemplates extends Component implements HasForms, HasTabl
     public function table(Table $table): Table
     {
         return $table
-            ->query(ItemTemplate::query()->whereIn('item_id', $this->item->itemAndParentsIdArray()))
+            ->query(ItemTemplate::query()->whereIn('item_id', $this->item->ancestorsAndSelf()->pluck('id')))
             ->heading('Inspection Templates')
             ->columns([
                 Tables\Columns\TextColumn::make('item.reference')

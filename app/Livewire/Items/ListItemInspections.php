@@ -52,7 +52,7 @@ class ListItemInspections extends Component implements HasForms, HasTable
                 Select::make('item_template_id')
                     ->label('Inspection Template')
                     ->options(fn (ItemInspection $record): Collection =>
-                        ItemTemplate::whereIn('item_id', $record->item->itemAndParentsIdArray())
+                        ItemTemplate::whereIn('item_id', $record->item->ancestorsAndSelf()->pluck('id')->toArray())
                             ->with('template')
                             ->get()
                             ->pluck('template.name', 'id')

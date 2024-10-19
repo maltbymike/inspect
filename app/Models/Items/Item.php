@@ -50,14 +50,6 @@ class Item extends Model
         return $this->parents()->with('inspectionTemplates');
     }
 
-    public function itemAndParentsIdArray(): Array
-    {
-        return $this->parents()->get()
-            ->pluck('id')
-            ->push($this->id)
-            ->toArray();
-    }
-
     public function templates(): BelongsToMany
     {
         return $this->belongsToMany(
