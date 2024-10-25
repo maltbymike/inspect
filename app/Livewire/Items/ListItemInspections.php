@@ -6,7 +6,6 @@ use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Set;
 use Livewire\Component;
-use Filament\Forms\Form;
 use App\Models\Items\Item;
 use Filament\Tables\Table;
 use Awcodes\Curator\Models\Media;
@@ -21,7 +20,6 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
@@ -29,6 +27,7 @@ use App\Models\Items\Inspections\ItemTemplate;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Models\Items\Inspections\ItemInspection;
 use Filament\Tables\Concerns\InteractsWithTable;
+use App\Filament\Resources\ItemInspectionResource;
 
 class ListItemInspections extends Component implements HasForms, HasTable
 {
@@ -52,7 +51,7 @@ class ListItemInspections extends Component implements HasForms, HasTable
                 Select::make('item_template_id')
                     ->label('Inspection Template')
                     ->options(fn (ItemInspection $record): Collection =>
-                        ItemTemplate::whereIn('item_id', $record->item->itemAndParentsIdArray())
+                        ItemTemplate::whereIn('item_id', $record->item->ancestorsAndSelf()->pluck('id')->toArray())
                             ->with('template')
                             ->get()
                             ->pluck('template.name', 'id')

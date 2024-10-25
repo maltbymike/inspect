@@ -9,19 +9,11 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Awcodes\Curator\Models\Media;
-use Illuminate\Support\Collection;
 use Filament\Tables\Grouping\Group;
-use Illuminate\Contracts\View\View;
-use Filament\Forms\Components\Livewire;
-use Illuminate\Support\Facades\Storage;
-use Filament\Forms\Components\Component;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ItemInspectionResource\Pages;
-use App\Filament\Resources\ItemInspectionResource\RelationManagers;
+use Illuminate\Support\HtmlString;
 
 class ItemInspectionResource extends Resource
 {
@@ -29,101 +21,83 @@ class ItemInspectionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function formSchema(): array
+    {
+        return [
+            Forms\Components\Section::make(fn (ItemInspection $record): string => $record->itemTemplate->template->name)
+                ->description(fn (ItemInspection $record): string => $record->item->name)
+                ->columns(2)
+                ->collapsed()
+                ->schema([
+                    Forms\Components\DateTimePicker::make('created_at'),
+                    Forms\Components\DateTimePicker::make('started_at'),
+                    Forms\Components\DateTimePicker::make('completed_at'),
+                    Forms\Components\Select::make('completed_by_user_id')
+                        ->relationship('completedByUser', 'name'),
+                ]),
+            Forms\Components\Actions::make([
+                Forms\Components\Actions\Action::make('startInspection')
+                    ->color('success')
+                    ->label(__('Start Inspection'))
+                    ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsStarted())
+                    ->action(
+                        function (ItemInspection $record, Set $set): void {
+                            $record->started_at = now();
+                            $record->save();
+                            $set('started_at', now()->toDateTimeString());
+                        } 
+                    ),
+            ])
+            ->columnSpanFull()
+            ->fullWidth(),
+            Forms\Components\Section::make('Inspection Information')
+                ->relationship('itemTemplate')
+                ->schema([
+                    Forms\Components\Repeater::make('documents')
+                        ->relationship('documents')
+                        ->addable(false)
+                        ->deletable(false)
+                        ->simple(
+                            Forms\Components\ViewField::make('title')
+                                ->view('filament.forms.components.document-link')
+                        ),
+                    Forms\Components\Placeholder::make('description')
+                        ->content(function (ItemTemplate $record) {
+                            return new HtmlString(str($record->description)->sanitizeHtml());
+                        }),                        
+                ]),
+            Forms\Components\Actions::make([
+                Forms\Components\Actions\Action::make('completeInspection')
+                    ->color('danger')
+                    ->label(__('Complete Inspection'))
+                    ->visible(
+                        fn (ItemInspection $record): bool => 
+                            $record->inspectionIsStarted()
+                    )
+                    ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsCompleted())
+                    ->form([
+                        Forms\Components\Select::make('completed_by')
+                            ->options(User::query()->pluck('name', 'id'))
+                            ->required(),
+                    ])
+                    ->action(
+                        function (array $data, ItemInspection $record, Set $set): void {
+                            $record->completed_at = now();
+                            $record->completedByUser()->associate($data['completed_by']);
+                            $record->save();
+                            $set('completed_at', now()->toDateTimeString());
+                        } 
+                    ),
+            ])
+            ->columnSpanFull()
+            ->fullWidth(),
+        ];
+    }
+
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Select::make('item_id')
-                    ->relationship('item', 'name')
-                    ->disabledOn('edit')
-                    ->required(),
-                Forms\Components\Select::make('item_template_id')
-                    ->label('Inspection Template')
-                    ->options(fn (ItemInspection $record): Collection =>
-                        ItemTemplate::whereIn('item_id', $record->item->itemAndParentsIdArray())
-                            ->with('template')
-                            ->get()
-                            ->pluck('template.name', 'id')
-                    )
-                    ->disabledOn('edit')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('created_at')
-                    ->readonly(),
-                Forms\Components\DateTimePicker::make('started_at')
-                    ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsNotStarted())
-                    ->readonly(),
-                Forms\Components\DateTimePicker::make('completed_at')
-                    ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsNotCompleted())
-                    ->readonly(),
-                Forms\Components\Select::make('completed_by_user_id')
-                    ->relationship('completedByUser', 'name')
-                    ->disabled(),
-                Forms\Components\Actions::make([
-                    Forms\Components\Actions\Action::make('startInspection')
-                        ->color('success')
-                        ->label(__('Start Inspection'))
-                        ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsStarted())
-                        ->action(
-                            function (ItemInspection $record, Set $set): void {
-                                $record->started_at = now();
-                                $record->save();
-                                $set('started_at', now()->toDateTimeString());
-                            } 
-                        ),
-                ])
-                ->columnSpanFull()
-                ->fullWidth(),
-                Forms\Components\Section::make('Inspection Information')
-                    ->relationship('itemTemplate')
-                    ->schema([
-                        Forms\Components\Repeater::make('documents')
-                            ->relationship('documents')
-                            ->grid(3)
-                            ->simple(
-                                Forms\Components\TextInput::make('title')
-                                    ->readOnly()
-                                    ->suffixAction(
-                                        Forms\Components\Actions\Action::make('viewDocument')
-                                            ->icon('heroicon-o-arrow-right-start-on-rectangle')
-                                            ->modalHeading(fn (Media $record): string => $record->title)
-                                            ->modalCancelAction(false)
-                                            ->modalSubmitAction(false)
-                                            ->modalContent(fn (Media $record): View => view(
-                                                'filament.pages.actions.embed-pdf',
-                                                ['record' => $record],
-                                            ))
-                                    )
-                            ),
-                        Forms\Components\RichEditor::make('description')
-                            ->toolbarButtons([]),
-                        
-                    ]),
-                Forms\Components\Actions::make([
-                    Forms\Components\Actions\Action::make('completeInspection')
-                        ->color('danger')
-                        ->label(__('Complete Inspection'))
-                        ->visible(
-                            fn (ItemInspection $record): bool => 
-                                $record->inspectionIsStarted()
-                        )
-                        ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsCompleted())
-                        ->form([
-                            Forms\Components\Select::make('completed_by')
-                                ->options(User::query()->pluck('name', 'id'))
-                                ->required(),
-                        ])
-                        ->action(
-                            function (array $data, ItemInspection $record, Set $set): void {
-                                $record->completed_at = now();
-                                $record->completedByUser()->associate($data['completed_by']);
-                                $record->save();
-                                $set('completed_at', now()->toDateTimeString());
-                            } 
-                        ),
-                ])
-                ->columnSpanFull()
-                ->fullWidth(),
-            ]);
+            ->schema(Static::formSchema());
     }
 
     public static function table(Table $table): Table

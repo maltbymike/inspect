@@ -9,30 +9,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 
 class Item extends Model
 {
+    use HasGraphRelationships;
     use HasFactory;
+    use SoftDeletes;
 
     protected $guarded = [];
+
+    public function getPivotTableName(): string
+    {
+        return 'items_parent_child';
+    }
 
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(
-            Item::class,
+            Category::class,
             'item_category_item',
             'item_id',
             'category_id',
-        );
-    }
-
-    public function children(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Item::class, 
-            'items_parent_child',
-            'parent_id',
-            'child_id',
         );
     }
 
@@ -51,24 +50,6 @@ class Item extends Model
     public function inspectionTemplatesFromParents(): BelongsToMany
     {
         return $this->parents()->with('inspectionTemplates');
-    }
-
-    public function itemAndParentsIdArray(): Array
-    {
-        return $this->parents()->get()
-            ->pluck('id')
-            ->push($this->id)
-            ->toArray();
-    }
-
-    public function parents(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Item::class, 
-            'items_parent_child',
-            'child_id',
-            'parent_id',
-        );
     }
 
     public function templates(): BelongsToMany

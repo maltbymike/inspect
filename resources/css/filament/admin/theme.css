@@ -3,3 +3,25 @@
 @import '/vendor/awcodes/filament-curator/resources/css/plugin.css';
 
 @config 'tailwind.config.js';
+
+/* Make table row actions sticky 
+   from https://filamentglow.com/trick/sticky-table-row-actions-4e3dba83 */
+.fi-ta-row {
+    .fi-ta-cell:last-of-type {
+        @apply relative right-0 top-0 bottom-0;
+        > div {
+            @apply bg-white rounded-full py-2 dark:bg-gray-900;
+        }
+    }
+    &:hover .fi-ta-cell:last-of-type {
+        position: sticky;
+        z-index: 8;
+        > div {
+            @apply shadow-md rounded-full py-2;
+        }
+    }
+}
+
+p {
+    margin-bottom: 1em;
+}
