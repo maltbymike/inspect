@@ -186,7 +186,7 @@ class ListItemInspections extends Component implements HasForms, HasTable
                     ->form([
                         Section::make()
                             ->columns(2)
-                            ->schema(ItemInspectionResource::formSchema())
+                            ->schema($this->formSchema())
                 ]),
             ])
             ->bulkActions([

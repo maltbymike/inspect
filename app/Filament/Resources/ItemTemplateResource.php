@@ -30,6 +30,7 @@ class ItemTemplateResource extends Resource
                 Forms\Components\Select::make('item_id')
                     ->relationship(name: 'item', titleAttribute: 'name')
                     ->disabled()
+
                     ->default(fn (InspectionTemplatesRelationManager $livewire): int => $livewire->getOwnerRecord()->id)
                     ->required(),
                 Forms\Components\Select::make('template_id')
