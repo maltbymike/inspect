@@ -56,7 +56,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                \Awcodes\Curator\CuratorPlugin::make()
+                \Awcodes\Curator\CuratorPlugin::make(),
                     // ->label('Media')
                     // ->pluralLabel('Media')
                     // ->navigationIcon('heroicon-o-photo')
@@ -66,6 +66,7 @@ class AdminPanelProvider extends PanelProvider
                     // ->registerNavigation(false)
                     // ->defaultListView('grid' || 'list')
                     // ->resource(\App\Filament\Resources\CustomMediaResource::class)
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])
             ->viteTheme('resources/css/filament/admin/theme.css');
     }
