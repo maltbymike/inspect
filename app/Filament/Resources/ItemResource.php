@@ -13,8 +13,9 @@ use App\Filament\Resources\ItemResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\ItemResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class ItemResource extends Resource
+class ItemResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Item::class;
 
@@ -45,6 +46,18 @@ class ItemResource extends Resource
             'index' => Pages\ListItems::route('/'),
             'create' => Pages\CreateItem::route('/create'),
             'edit' => Pages\EditItem::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
         ];
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20ef5f51a8a5b51bed54bbe3796d6c9e",
+    "content-hash": "9f403486f4f005f9a53be58e4e503b73",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -8336,6 +8336,142 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.2.7"
             },
             "time": "2023-12-08T13:03:43+00:00"
+        },
+        {
+            "name": "tomatophp/console-helpers",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tomatophp/console-helpers.git",
+                "reference": "69dd818a2bfa7d038467fb526be6c9b573d36a34"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tomatophp/console-helpers/zipball/69dd818a2bfa7d038467fb526be6c9b573d36a34",
+                "reference": "69dd818a2bfa7d038467fb526be6c9b573d36a34",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TomatoPHP\\ConsoleHelpers\\ConsoleHelpersServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TomatoPHP\\ConsoleHelpers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fady Mondy",
+                    "email": "EngFadyMondy@gmail.com"
+                }
+            ],
+            "description": "tons of helper you need for you artisan command line application",
+            "keywords": [
+                "application",
+                "artisan",
+                "command",
+                "console",
+                "helpers",
+                "line"
+            ],
+            "support": {
+                "issues": "https://github.com/tomatophp/console-helpers/issues",
+                "source": "https://github.com/tomatophp/console-helpers/tree/v1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/3x1io",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-02-12T12:00:38+00:00"
+        },
+        {
+            "name": "tomatophp/filament-users",
+            "version": "v2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tomatophp/filament-users.git",
+                "reference": "60c8f8690d0359cba6beeaf6e191c45c00dfb650"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tomatophp/filament-users/zipball/60c8f8690d0359cba6beeaf6e191c45c00dfb650",
+                "reference": "60c8f8690d0359cba6beeaf6e191c45c00dfb650",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.2",
+                "php": "^8.1|^8.2",
+                "tomatophp/console-helpers": "^1.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.18",
+                "livewire/livewire": "^2.10|^3.0",
+                "nunomaduro/larastan": "^2.9",
+                "orchestra/testbench": "^9.5",
+                "pestphp/pest": "^2.36",
+                "pestphp/pest-plugin-laravel": "^2.4",
+                "pestphp/pest-plugin-livewire": "^2.1",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^1.2",
+                "phpstan/phpstan-phpunit": "^1.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TomatoPHP\\FilamentUsers\\FilamentUsersServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TomatoPHP\\FilamentUsers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fady Mondy",
+                    "email": "info@3x1.io"
+                }
+            ],
+            "description": "User Table Resource with a lot of packages integrations",
+            "keywords": [
+                "User management",
+                "Users",
+                "filament-impersonate",
+                "filament-shield",
+                "filamentphp",
+                "laravel",
+                "php",
+                "user CRUD",
+                "user resource"
+            ],
+            "support": {
+                "issues": "https://github.com/tomatophp/filament-users/issues",
+                "source": "https://github.com/tomatophp/filament-users/tree/v2.0.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/3x1io",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-10-26T16:17:42+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

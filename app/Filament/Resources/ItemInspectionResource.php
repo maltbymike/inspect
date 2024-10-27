@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -15,7 +16,7 @@ use App\Models\Items\Inspections\ItemInspection;
 use App\Filament\Resources\ItemInspectionResource\Pages;
 use Illuminate\Support\HtmlString;
 
-class ItemInspectionResource extends Resource
+class ItemInspectionResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = ItemInspection::class;
 
@@ -168,6 +169,24 @@ class ItemInspectionResource extends Resource
             'create' => Pages\CreateItemInspection::route('/create'),
             'view' => Pages\ViewItemInspection::route('/{record}'),
             'edit' => Pages\EditItemInspection::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'restore_any',
+            'replicate',
+            'reorder',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
         ];
     }
 }

@@ -67,6 +67,8 @@ class AdminPanelProvider extends PanelProvider
                     // ->defaultListView('grid' || 'list')
                     // ->resource(\App\Filament\Resources\CustomMediaResource::class)
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \TomatoPHP\FilamentUsers\FilamentUsersPlugin::make(),
+
             ])
             ->viteTheme('resources/css/filament/admin/theme.css');
     }

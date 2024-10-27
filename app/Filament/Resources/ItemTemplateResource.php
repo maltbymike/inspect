@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ItemResource\RelationManagers\InspectionTemplatesRelationManager;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -15,7 +16,7 @@ use Awcodes\Curator\Components\Forms\CuratorPicker;
 use App\Filament\Resources\ItemTemplateResource\Pages;
 use Filament\Resources\RelationManagers\RelationManager;
 
-class ItemTemplateResource extends Resource
+class ItemTemplateResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = ItemTemplate::class;
 
@@ -120,6 +121,24 @@ class ItemTemplateResource extends Resource
             'create' => Pages\CreateItemTemplate::route('/create'),
             'view' => Pages\ViewItemTemplate::route('/{record}'),
             'edit' => Pages\EditItemTemplate::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'restore_any',
+            'replicate',
+            'reorder',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
         ];
     }
 }
