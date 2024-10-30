@@ -51,14 +51,7 @@ class ItemResource extends Resource implements HasShieldPermissions
 
     public static function getPermissionPrefixes(): array
     {
-        return [
-            'view',
-            'view_any',
-            'create',
-            'update',
-            'delete',
-            'delete_any',
-        ];
+        return config('filament-shield.permission_prefixes.resource_with_soft_deletes');
     }
 
     public static function getRelations(): array

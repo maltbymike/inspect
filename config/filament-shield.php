@@ -30,7 +30,7 @@ return [
     ],
 
     'permission_prefixes' => [
-        'resource' => [
+        'resource_with_soft_deletes' => [
             'view',
             'view_any',
             'create',
@@ -44,6 +44,15 @@ return [
             'force_delete',
             'force_delete_any',
         ],
+        'resource' => [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+        ],
+    
 
         'page' => 'page',
         'widget' => 'widget',
