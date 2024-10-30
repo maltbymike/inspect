@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DevSeeder extends Seeder
+class ProdSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,9 +13,8 @@ class DevSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            ProdSeeder::class,
-            DevItemCategorySeeder::class,
-            DevItemSeeder::class,
+            ShieldSeeder::class,
+            DevUserSeeder::class,
         ]);
     }
 }
