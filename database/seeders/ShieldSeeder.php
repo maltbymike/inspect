@@ -84,6 +84,31 @@ class ShieldSeeder extends Seeder
                     "page_ViewItem"
                 ]
             },
+            {"name":"item_inspector","guard_name":"web","permissions":
+                [
+                    "view_item",
+                    "view_any_item",
+
+                    "view_item::inspection",
+                    "view_any_item::inspection",
+                    "create_item::inspection",
+                    "update_item::inspection",
+                    "restore_item::inspection",
+                    "restore_any_item::inspection",
+                    "replicate_item::inspection",
+                    "reorder_item::inspection",
+                    "delete_item::inspection",
+                    "delete_any_item::inspection",
+                    "force_delete_item::inspection",
+                    "force_delete_any_item::inspection",
+
+                    "view_item::template",
+                    "view_any_item::template",
+                    
+                    "view_media",
+                    "view_any_media"
+                ]
+            },
             {"name":"panel_user","guard_name":"web","permissions":
                 []
             }
