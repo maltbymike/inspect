@@ -40,6 +40,7 @@ class ViewItem extends Page implements HasForms, HasInfolists
     {
         return [
             Action::make('edit')
+                ->disabled(fn () => ! auth()->user()->can('update_item'))
                 ->url(route('filament.admin.resources.items.edit', ['record' => $this->record])),
         ];
     }
