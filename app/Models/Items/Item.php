@@ -2,14 +2,14 @@
 
 namespace App\Models\Items;
 
-use App\Models\Items\Inspections\ItemInspection;
 use App\Models\Items\Inspections\ItemTemplate;
+use App\Models\Items\Inspections\ItemInspection;
 use App\Models\Items\Inspections\Template;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 
 class Item extends Model
