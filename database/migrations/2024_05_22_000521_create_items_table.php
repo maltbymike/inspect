@@ -15,6 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('reference', 30);
             $table->string('name', 255);
+            $table->foreignId('parent_id')
+                ->nullable();
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('items');
             $table->timestamps();
         });
     }
