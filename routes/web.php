@@ -18,8 +18,4 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/category/{category?}', Category::class)->name('item_categories');
-    Route::get('/items', ListItems::class)->name('list-items');
-    Route::get('item/{item}', Item::class)->name('item');
-    Route::get('/items/inspections/template/{template?}', InspectionTemplate::class)->name('item_inspections_template');
 });
