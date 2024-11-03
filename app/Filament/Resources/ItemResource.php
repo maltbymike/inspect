@@ -63,7 +63,6 @@ class ItemResource extends Resource implements HasShieldPermissions
             ]),
             RelationGroup::make('Item Information', [
                 RelationManagers\CategoriesRelationManager::class,
-                RelationManagers\ParentsRelationManager::class,
                 RelationManagers\ChildrenRelationManager::class,
             ]),
         ];

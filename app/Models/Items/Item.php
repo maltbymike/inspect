@@ -2,27 +2,27 @@
 
 namespace App\Models\Items;
 
-use App\Models\Items\Inspections\ItemInspection;
 use App\Models\Items\Inspections\ItemTemplate;
+use App\Models\Items\Inspections\ItemInspection;
 use App\Models\Items\Inspections\Template;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class Item extends Model
 {
-    use HasGraphRelationships;
+    use HasRecursiveRelationships;
     use HasFactory;
     use SoftDeletes;
 
     protected $guarded = [];
 
-    public function getPivotTableName(): string
+    public function getParentKeyName(): string
     {
-        return 'items_parent_child';
+        return 'parent_id';
     }
 
     public function categories(): BelongsToMany
@@ -45,11 +45,6 @@ class Item extends Model
     public function inspectionTemplates(): HasMany
     {
         return $this->hasMany(ItemTemplate::class);
-    }
-
-    public function inspectionTemplatesFromParents(): BelongsToMany
-    {
-        return $this->parents()->with('inspectionTemplates');
     }
 
     public function templates(): BelongsToMany
