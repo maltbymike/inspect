@@ -15,12 +15,16 @@ class ItemImporter extends Importer
     {
         return [
             ImportColumn::make('reference')
+                ->examples(['1001', '1001-01', '1002', '1002-01'])
                 ->requiredMapping()
-                // ->rules(['required']),
-                ->rules(['required', 'unique:App\Models\Items\Item,reference']),
+                ->rules(['required']),
             ImportColumn::make('name')
+                ->examples(['Air Compressor', 'Air Compressor #1', 'Nail Gun', 'Nail Gun #1'])
                 ->requiredMappingForNewRecordsOnly()
                 ->rules(['required']),
+            ImportColumn::make('parent')
+                ->examples(['', '1001', '', '1002'])
+                ->relationship(resolveUsing: 'reference'),
         ];
     }
 
