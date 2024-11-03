@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Imports\Items\ItemImporter;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use App\Models\Items\Item;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
@@ -110,6 +112,10 @@ class ItemResource extends Resource implements HasShieldPermissions
                         ->label('Make Active')
                         ->color('success'),
                 ]),
+            ])
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(ItemImporter::class)
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
