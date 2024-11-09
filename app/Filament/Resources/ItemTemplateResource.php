@@ -101,7 +101,6 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
                 Tables\Actions\ActionGroup::make(
                     Static::StandardTableActions()
                 ),
-                // Tables\Actions\EditAction::make(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
