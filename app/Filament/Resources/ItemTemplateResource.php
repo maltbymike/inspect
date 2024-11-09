@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ItemResource\RelationManagers\InspectionTemplatesRelationManager;
+use App\Traits\HasStandardTableActions;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Tables;
@@ -18,6 +19,8 @@ use Filament\Resources\RelationManagers\RelationManager;
 
 class ItemTemplateResource extends Resource implements HasShieldPermissions
 {
+    use HasStandardTableActions;
+
     protected static ?string $model = ItemTemplate::class;
 
     protected static bool $shouldRegisterNavigation = false;
@@ -95,7 +98,10 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
                     } 
                 ),
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make(
+                    Static::StandardTableActions()
+                ),
+                // Tables\Actions\EditAction::make(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
@@ -121,6 +127,7 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
             'create' => Pages\CreateItemTemplate::route('/create'),
             'view' => Pages\ViewItemTemplate::route('/{record}'),
             'edit' => Pages\EditItemTemplate::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 
