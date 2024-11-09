@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Traits\HasStandardTableActions;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use App\Models\User;
@@ -18,6 +19,8 @@ use Illuminate\Support\HtmlString;
 
 class ItemInspectionResource extends Resource implements HasShieldPermissions
 {
+    use HasStandardTableActions;
+
     protected static ?string $model = ItemInspection::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -146,7 +149,9 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make(
+                    Static::StandardTableActions(),
+                )
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -169,6 +174,7 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
             'create' => Pages\CreateItemInspection::route('/create'),
             'view' => Pages\ViewItemInspection::route('/{record}'),
             'edit' => Pages\EditItemInspection::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 
