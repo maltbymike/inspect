@@ -21,6 +21,6 @@ class EditHistory extends ListActivities
 
     public function getTitle(): string
     {
-        return __('Item Edit History');
+        return __('Item Inspection Edit History');
     }
 }
