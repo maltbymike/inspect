@@ -46,6 +46,7 @@ class ItemResource extends Resource implements HasShieldPermissions
             'index' => Pages\ListItems::route('/'),
             'create' => Pages\CreateItem::route('/create'),
             'edit' => Pages\EditItem::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 
@@ -103,6 +104,9 @@ class ItemResource extends Resource implements HasShieldPermissions
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
                         ->url(fn (Item $record): string => ItemResource::getUrl('edit', ['record' => $record])),
+                    Tables\Actions\Action::make('edit-history')
+                        ->icon('heroicon-m-document-magnifying-glass')
+                        ->url(fn ($record) => ItemResource::getUrl('edit-history', ['record' => $record])),
                     Tables\Actions\DeleteAction::make()
                         ->label('Make Inactive'),
                     Tables\Actions\RestoreAction::make()
