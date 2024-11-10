@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Items\Inspections\Template;
-use App\Models\Items\Item;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,10 +17,10 @@ return new class extends Migration
             $table->foreign('item_id')
                 ->references('id')
                 ->on('items');
-            $table->foreignId('template_id');
-            $table->foreign('template_id')
+            $table->foreignId('type_id');
+            $table->foreign('type_id')
                 ->references('id')
-                ->on('item_inspection_templates');
+                ->on('item_template_types');
             $table->longText('description')
                 ->nullable();
             $table->timestamps();

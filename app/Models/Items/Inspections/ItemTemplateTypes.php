@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Template extends Model
+class ItemTemplateTypes extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
     
-    protected $table = 'item_inspection_templates';
+    protected $table = 'item_template_types';
 
     public function item(): BelongsTo
     {
