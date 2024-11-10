@@ -77,6 +77,6 @@ class User extends Authenticatable implements FilamentUser
     public function getActivityLogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logUnguarded();
+            ->logOnly(['name', 'email']);
     }
 }

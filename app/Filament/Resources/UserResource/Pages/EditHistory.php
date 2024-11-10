@@ -2,12 +2,27 @@
 
 namespace App\Filament\Resources\UserResource\Pages;
 
+use App\Traits\HasCorrectedCreateFieldLabelMap;
 use App\Filament\Resources\UserResource;
-use Filament\Resources\Pages\Page;
+use pxlrbt\FilamentActivityLog\Pages\ListActivities;
 
-class EditHistory extends Page
+class EditHistory extends ListActivities
 {
+    use HasCorrectedCreateFieldLabelMap;
+
     protected static string $resource = UserResource::class;
 
-    protected static string $view = 'filament.resources.user-resource.pages.edit-history';
+    public function getBreadcrumbs(): array
+    {
+        return [
+            route('filament.admin.resources.users.index') => __('Users'),
+            route('filament.admin.resources.users.edit', ['record' => $this->record]) => $this->record->name,
+            $this->getTitle(),
+        ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('User Edit History');
+    }
 }
