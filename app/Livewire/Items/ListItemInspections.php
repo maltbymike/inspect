@@ -52,9 +52,9 @@ class ListItemInspections extends Component implements HasForms, HasTable
                     ->label('Inspection Template')
                     ->options(fn (ItemInspection $record): Collection =>
                         ItemTemplate::whereIn('item_id', $record->item->ancestorsAndSelf()->pluck('id')->toArray())
-                            ->with('template')
+                            ->with('type')
                             ->get()
-                            ->pluck('template.name', 'id')
+                            ->pluck('type.name', 'id')
                     )
                     ->disabledOn('edit')
                     ->required(),
@@ -143,7 +143,7 @@ class ListItemInspections extends Component implements HasForms, HasTable
             ->query(ItemInspection::query()->where('item_id', $this->item->id))
             ->heading('Inspections')
             ->columns([
-                Tables\Columns\TextColumn::make('itemTemplate.template.name')
+                Tables\Columns\TextColumn::make('itemTemplate.type.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

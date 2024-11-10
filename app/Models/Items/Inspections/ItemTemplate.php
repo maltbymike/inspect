@@ -4,6 +4,7 @@ namespace App\Models\Items\Inspections;
 
 use App\Models\Items\Item;
 use Awcodes\Curator\Models\Media;
+use Filament\Actions\Concerns\BelongsToGroup;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -48,8 +49,8 @@ class ItemTemplate extends Pivot
         return $this->hasMany(ItemTemplateMedia::class, 'item_template_id', 'id');
     }
 
-    public function template(): BelongsTo
+    public function type(): BelongsTo
     {
-        return $this->belongsTo(Template::class);
+        return $this->belongsTo(ItemTemplateTypes::class, 'type_id', 'id');
     }
 }
