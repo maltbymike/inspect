@@ -2,13 +2,13 @@
 
 namespace App\Models\Items;
 
-use App\Models\Items\Inspections\ItemTemplate;
-use App\Models\Items\Inspections\ItemInspection;
-use App\Models\Items\Inspections\Template;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Items\Inspections\ItemTemplate;
+use App\Models\Items\Inspections\ItemInspection;
+use App\Models\Items\Inspections\ItemTemplateTypes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
@@ -47,25 +47,10 @@ class Item extends Model
         return $this->hasMany(ItemTemplate::class);
     }
 
-    /**
-     * @deprecated use types() instead
-     * Summary of templates
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function templates(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Template::class,
-            'item_template',
-            'item_id',
-            'type_id',
-        );
-    }
-
     public function types(): BelongsToMany
     {
         return $this->belongsToMany(
-            Template::class,
+            ItemTemplateTypes::class,
             'item_template',
             'item_id',
             'type_id',
