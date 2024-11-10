@@ -34,7 +34,7 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
 
                     ->default(fn (InspectionTemplatesRelationManager $livewire): int => $livewire->getOwnerRecord()->id)
                     ->required(),
-                Forms\Components\Select::make('template_id')
+                Forms\Components\Select::make('type_id')
                     ->relationship(name: 'type', titleAttribute: 'name')
                     ->disabledOn('edit')
                     ->createOptionForm([

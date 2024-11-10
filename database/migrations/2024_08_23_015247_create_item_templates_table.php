@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreign('item_id')
                 ->references('id')
                 ->on('items');
-            $table->foreignId('template_id');
-            $table->foreign('template_id')
+            $table->foreignId('type_id');
+            $table->foreign('type_id')
                 ->references('id')
                 ->on('item_template_types');
             $table->longText('description')

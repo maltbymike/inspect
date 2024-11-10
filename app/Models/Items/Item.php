@@ -58,7 +58,7 @@ class Item extends Model
             Template::class,
             'item_template',
             'item_id',
-            'template_id',
+            'type_id',
         );
     }
 
@@ -68,7 +68,7 @@ class Item extends Model
             Template::class,
             'item_template',
             'item_id',
-            'template_id',
+            'type_id',
         );
     }
 }
