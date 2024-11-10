@@ -35,7 +35,7 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
                     ->default(fn (InspectionTemplatesRelationManager $livewire): int => $livewire->getOwnerRecord()->id)
                     ->required(),
                 Forms\Components\Select::make('template_id')
-                    ->relationship(name: 'template', titleAttribute: 'name')
+                    ->relationship(name: 'type', titleAttribute: 'name')
                     ->disabledOn('edit')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name'),
@@ -56,7 +56,7 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('item.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('template.name')
+                Tables\Columns\TextColumn::make('type.name')
                     ->numeric()
                     ->sortable(),
             ])

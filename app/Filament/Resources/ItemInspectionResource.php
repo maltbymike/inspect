@@ -23,9 +23,11 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function formSchema(): array
-    {
+    {        
         return [
-            Forms\Components\Section::make(fn (ItemInspection $record): string => $record->itemTemplate->template->name)
+            Forms\Components\Section::make(function (ItemInspection $record): string {
+                return $record->itemTemplate->type->name;
+            })
                 ->description(fn (ItemInspection $record): string => $record->item->name)
                 ->columns(2)
                 ->collapsed()
@@ -113,7 +115,7 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
             ->columns([
                 Tables\Columns\TextColumn::make('item.name')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('itemTemplate.template.name')
+                Tables\Columns\TextColumn::make('itemTemplate.type.name')
                     ->label('Inspection Item')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

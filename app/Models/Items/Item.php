@@ -47,7 +47,22 @@ class Item extends Model
         return $this->hasMany(ItemTemplate::class);
     }
 
+    /**
+     * @deprecated use types() instead
+     * Summary of templates
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function templates(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Template::class,
+            'item_template',
+            'item_id',
+            'template_id',
+        );
+    }
+
+    public function types(): BelongsToMany
     {
         return $this->belongsToMany(
             Template::class,
