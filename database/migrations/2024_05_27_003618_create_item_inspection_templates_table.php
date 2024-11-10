@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('item_inspection_templates', function (Blueprint $table) {
+        Schema::create('item_template_types', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
             $table->longText('description')
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_inspection_templates');
+        Schema::dropIfExists('item_template_types');
     }
 };

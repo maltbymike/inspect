@@ -13,7 +13,7 @@ class Template extends Model
 
     protected $guarded = [];
     
-    protected $table = 'item_inspection_templates';
+    protected $table = 'item_template_types';
 
     public function item(): BelongsTo
     {

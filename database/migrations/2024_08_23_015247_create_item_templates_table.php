@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('template_id');
             $table->foreign('template_id')
                 ->references('id')
-                ->on('item_inspection_templates');
+                ->on('item_template_types');
             $table->longText('description')
                 ->nullable();
             $table->timestamps();
