@@ -13,6 +13,11 @@ class MediaResource extends CuratorMediaResource implements HasShieldPermissions
 {
     use HasStandardTableActions;
     
+    public static function getNavigationGroup(): string|null 
+    {
+        return 'Resources';
+    }
+
     public static function getModel(): string
     {
         return config('curator.model');

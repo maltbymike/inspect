@@ -22,7 +22,10 @@ class ItemResource extends Resource implements HasShieldPermissions
 
     protected static ?string $model = Item::class;
 
+    protected static ?string $navigationGroup = 'Items';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = "List Item";
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

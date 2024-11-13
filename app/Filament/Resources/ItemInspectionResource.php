@@ -23,7 +23,9 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
 
     protected static ?string $model = ItemInspection::class;
 
+    protected static ?string $navigationGroup = 'Items';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 2;
 
     public static function formSchema(): array
     {        
