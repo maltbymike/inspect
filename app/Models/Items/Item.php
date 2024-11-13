@@ -61,8 +61,6 @@ class Item extends Model
         return $this->belongsToMany(
             ItemTemplateType::class,
             'item_template',
-            'item_id',
-            'type_id',
         );
     }
 }
