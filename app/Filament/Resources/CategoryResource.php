@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Items\Category;
+use App\Traits\HasStandardTableActions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +14,8 @@ use Filament\Tables\Table;
 
 class CategoryResource extends Resource
 {
+    use HasStandardTableActions;
+
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -56,7 +59,9 @@ class CategoryResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make(
+                    Static::StandardTableActions(),
+                ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -79,6 +84,7 @@ class CategoryResource extends Resource
             'create' => Pages\CreateCategory::route('/create'),
             'view' => Pages\ViewCategory::route('/{record}'),
             'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 }
