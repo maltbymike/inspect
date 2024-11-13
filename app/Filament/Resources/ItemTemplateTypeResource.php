@@ -5,19 +5,22 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ItemTemplateTypeResource\Pages;
 use App\Filament\Resources\ItemTemplateTypeResource\RelationManagers;
 use App\Models\Items\Inspections\ItemTemplateType;
+use App\Traits\HasStandardTableActions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ItemTemplateTypeResource extends Resource
 {
+    use HasStandardTableActions;
+
     protected static ?string $model = ItemTemplateType::class;
 
+    protected static ?string $navigationGroup = 'Items';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -50,7 +53,9 @@ class ItemTemplateTypeResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make(
+                    Static::StandardTableActions(),
+                )
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -62,7 +67,7 @@ class ItemTemplateTypeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ItemsRelationManager::class,
         ];
     }
 
@@ -73,6 +78,7 @@ class ItemTemplateTypeResource extends Resource
             'create' => Pages\CreateItemTemplateType::route('/create'),
             'view' => Pages\ViewItemTemplateType::route('/{record}'),
             'edit' => Pages\EditItemTemplateType::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 }
