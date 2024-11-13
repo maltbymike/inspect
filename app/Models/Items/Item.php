@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
-use App\Models\Items\Inspections\ItemTemplateTypes;
+use App\Models\Items\Inspections\ItemTemplateType;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -59,7 +59,7 @@ class Item extends Model
     public function types(): BelongsToMany
     {
         return $this->belongsToMany(
-            ItemTemplateTypes::class,
+            ItemTemplateType::class,
             'item_template',
             'item_id',
             'type_id',

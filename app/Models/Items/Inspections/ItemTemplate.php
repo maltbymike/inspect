@@ -51,6 +51,6 @@ class ItemTemplate extends Pivot
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(ItemTemplateTypes::class, 'type_id', 'id');
+        return $this->belongsTo(ItemTemplateType::class, 'type_id', 'id');
     }
 }
