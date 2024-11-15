@@ -4,13 +4,16 @@ namespace App\Models\Items\Inspections;
 
 use App\Models\User;
 use App\Models\Items\Item;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ItemInspection extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     protected $guarded = [];
 
@@ -29,6 +32,12 @@ class ItemInspection extends Model
     public function completedByUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'completed_by_user_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded();
     }
 
     public function inspectionIsCompleted(): bool

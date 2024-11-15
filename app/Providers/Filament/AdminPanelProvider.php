@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -72,6 +73,18 @@ class AdminPanelProvider extends PanelProvider
 
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label(__('Items'))
+                    ->collapsed(),
+                NavigationGroup::make()
+                    ->label(__('Resources'))
+                    ->collapsed(),
+                NavigationGroup::make()
+                    ->label(__('User Management'))
+                    ->collapsed(),
+            ])
+            ->topNavigation()
             ->databaseNotifications();
     }
 }

@@ -5,16 +5,19 @@ namespace App\Models\Items\Inspections;
 use App\Models\Items\Item;
 use Awcodes\Curator\Models\Media;
 use Filament\Actions\Concerns\BelongsToGroup;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ItemTemplate extends Pivot
 {
     use HasFactory;
+    use LogsActivity;
 
     public $incrementing = true;
 
@@ -25,6 +28,12 @@ class ItemTemplate extends Pivot
             ->orderBy('order');
     }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded();
+    }
+    
     public function inspections(): HasMany
     {
         return $this->hasMany(ItemInspection::class, 'item_template_id');
@@ -42,6 +51,6 @@ class ItemTemplate extends Pivot
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(ItemTemplateTypes::class, 'type_id', 'id');
+        return $this->belongsTo(ItemTemplateType::class, 'type_id', 'id');
     }
 }

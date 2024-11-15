@@ -6,24 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
-use App\Models\Items\Inspections\ItemTemplateTypes;
+use App\Models\Items\Inspections\ItemTemplateType;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class Item extends Model
 {
     use HasRecursiveRelationships;
     use HasFactory;
+    use LogsActivity;
     use SoftDeletes;
 
     protected $guarded = [];
-
-    public function getParentKeyName(): string
-    {
-        return 'parent_id';
-    }
 
     public function categories(): BelongsToMany
     {
@@ -33,6 +31,17 @@ class Item extends Model
             'item_id',
             'category_id',
         );
+    }
+
+    public function getActivityLogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded();
+    }
+
+    public function getParentKeyName(): string
+    {
+        return 'parent_id';
     }
 
     public function inspections(): HasMany
@@ -50,10 +59,8 @@ class Item extends Model
     public function types(): BelongsToMany
     {
         return $this->belongsToMany(
-            ItemTemplateTypes::class,
+            ItemTemplateType::class,
             'item_template',
-            'item_id',
-            'type_id',
         );
     }
 }

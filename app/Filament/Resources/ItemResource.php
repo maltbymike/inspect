@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Traits\HasStandardTableActions;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -17,9 +18,14 @@ use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
 class ItemResource extends Resource implements HasShieldPermissions
 {
+    use HasStandardTableActions;
+
     protected static ?string $model = Item::class;
 
+    protected static ?string $navigationGroup = 'Items';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = "List Item";
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -46,6 +52,7 @@ class ItemResource extends Resource implements HasShieldPermissions
             'index' => Pages\ListItems::route('/'),
             'create' => Pages\CreateItem::route('/create'),
             'edit' => Pages\EditItem::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 
@@ -100,15 +107,9 @@ class ItemResource extends Resource implements HasShieldPermissions
                     ->color('gray')
                     ->disabled(fn ($record) => $record->trashed())
                     ->url(fn ($record): string => route('filament.admin.pages.items.view', ['id' => $record->id] )),
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make()
-                        ->url(fn (Item $record): string => ItemResource::getUrl('edit', ['record' => $record])),
-                    Tables\Actions\DeleteAction::make()
-                        ->label('Make Inactive'),
-                    Tables\Actions\RestoreAction::make()
-                        ->label('Make Active')
-                        ->color('success'),
-                ]),
+                Tables\Actions\ActionGroup::make(
+                    Static::StandardTableActions(hasSoftDeleteActions: true),
+                ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
