@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Items\Category;
 use App\Models\Items\Inspections\ItemInspection;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Item;
+use App\Policies\Items\CategoryPolicy;
 use App\Policies\Items\Inspections\ItemInspectionPolicy;
 use App\Policies\Items\Inspections\ItemTemplatePolicy;
 use App\Policies\Items\ItemPolicy;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Item::class, ItemPolicy::class);
         Gate::policy(ItemInspection::class, ItemInspectionPolicy::class);
         Gate::policy(ItemTemplate::class, ItemTemplatePolicy::class);

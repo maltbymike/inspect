@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ItemResource\RelationManagers\InspectionTemplatesRelationManager;
+use App\Traits\HasStandardTableActions;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Tables;
@@ -18,6 +19,8 @@ use Filament\Resources\RelationManagers\RelationManager;
 
 class ItemTemplateResource extends Resource implements HasShieldPermissions
 {
+    use HasStandardTableActions;
+
     protected static ?string $model = ItemTemplate::class;
 
     protected static bool $shouldRegisterNavigation = false;
@@ -34,8 +37,8 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
 
                     ->default(fn (InspectionTemplatesRelationManager $livewire): int => $livewire->getOwnerRecord()->id)
                     ->required(),
-                Forms\Components\Select::make('template_id')
-                    ->relationship(name: 'template', titleAttribute: 'name')
+                Forms\Components\Select::make('type_id')
+                    ->relationship(name: 'type', titleAttribute: 'name')
                     ->disabledOn('edit')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name'),
@@ -56,7 +59,7 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('item.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('template.name')
+                Tables\Columns\TextColumn::make('type.name')
                     ->numeric()
                     ->sortable(),
             ])
@@ -95,7 +98,9 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
                     } 
                 ),
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make(
+                    Static::StandardTableActions()
+                ),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
@@ -121,6 +126,7 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
             'create' => Pages\CreateItemTemplate::route('/create'),
             'view' => Pages\ViewItemTemplate::route('/{record}'),
             'edit' => Pages\EditItemTemplate::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 

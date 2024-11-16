@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Traits\HasStandardTableActions;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -26,6 +27,8 @@ use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
 class UserResource extends Resource implements HasShieldPermissions
 {
+    use HasStandardTableActions;
+
     protected static ?string $model = User::class;
 
     protected static ?int $navigationSort = 9;
@@ -39,7 +42,7 @@ class UserResource extends Resource implements HasShieldPermissions
 
     public static function getPermissionPrefixes(): array
     {
-        return config('filament-shield.permission_prefixes.resource');
+        return config('filament-shield.permission_prefixes.resource_with_soft_deletes');
     }
 
     public static function getPluralLabel(): string
@@ -117,6 +120,9 @@ class UserResource extends Resource implements HasShieldPermissions
             $table->actions([Impersonate::make('impersonate')]);
         }
         $table
+            ->recordAction(ViewAction::class)
+            ->recordClasses(fn (User $record) => $record->trashed() ? 'bg-danger-100' : '')
+            ->recordUrl(null)
             ->columns([
                 TextColumn::make('id')
                     ->sortable()
@@ -150,13 +156,17 @@ class UserResource extends Resource implements HasShieldPermissions
                 Tables\Filters\Filter::make('unverified')
                     ->label(trans('filament-users::user.resource.unverified'))
                     ->query(fn(Builder $query): Builder => $query->whereNull('email_verified_at')),
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Inactive Users')
+                    ->placeholder('Without Inactive Users')
+                    ->trueLabel('With Inactive Users')
+                    ->falseLabel('Only Inactive Users'),
             ])
             ->actions([
-                ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make(),
-                    DeleteAction::make()
-                ]),
+                ViewAction::make(),
+                ActionGroup::make(
+                    Static::StandardTableActions(hasSoftDeleteActions: true)
+                ),
             ]);
         return $table;
     }
@@ -167,6 +177,7 @@ class UserResource extends Resource implements HasShieldPermissions
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
     }
 }

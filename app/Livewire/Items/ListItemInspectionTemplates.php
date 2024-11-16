@@ -48,7 +48,7 @@ class ListItemInspectionTemplates extends Component implements HasForms, HasTabl
                     ->sortable(),
                 Tables\Columns\TextColumn::make('item.name')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('template.name')
+                Tables\Columns\TextColumn::make('type.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
