@@ -2,15 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\Items\Category;
-use App\Traits\HasStandardTableActions;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Items\Category;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Toggle;
+use App\Traits\HasStandardTableActions;
+use Filament\Forms\Components\TextInput;
+use App\Filament\Resources\CategoryResource\Pages;
+use Filament\Resources\RelationManagers\RelationGroup;
+use App\Filament\Resources\CategoryResource\RelationManagers;
 
 class CategoryResource extends Resource
 {
@@ -26,13 +28,20 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
+                    ->columnSpan(3)
                     ->required(),
-                Forms\Components\TextInput::make('slug')
+                TextInput::make('slug')
+                    ->columnSpan(3)
                     ->required(),
-                Forms\Components\Toggle::make('is_root')
+                Toggle::make('is_root')
+                    ->label('Root Category')
+                    ->columnSpan(1)
+                    ->extraAttributes(['class' => 'mt-1'])
+                    ->inline(false)
                     ->required(),
-            ]);
+            ])
+            ->columns(7);
     }
 
     public static function table(Table $table): Table
@@ -73,7 +82,16 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationGroup::make('Items', [
+                RelationManagers\ItemsRelationManager::class,
+            ]),
+            RelationGroup::make('Child Categories', [
+                RelationManagers\ChildrenRelationManager::class,
+            ]),
+            RelationGroup::make('Parent Categories', [
+
+                RelationManagers\ParentsRelationManager::class,
+            ]),
         ];
     }
 
