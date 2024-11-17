@@ -37,11 +37,23 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                 ->columns(2)
                 ->collapsed()
                 ->schema([
-                    Forms\Components\DateTimePicker::make('created_at'),
-                    Forms\Components\DateTimePicker::make('started_at'),
-                    Forms\Components\DateTimePicker::make('completed_at'),
-                    Forms\Components\Select::make('completed_by_user_id')
-                        ->relationship('completedByUser', 'name'),
+                    Forms\Components\Fieldset::make('Timestamps')
+                        ->columnSpan(1)
+                        ->schema([
+                            Forms\Components\DateTimePicker::make('created_at'),
+                            Forms\Components\DateTimePicker::make('started_at'),
+                            Forms\Components\DateTimePicker::make('completed_at'),
+                        ]),
+                    Forms\Components\Fieldset::make('Responsible Users')
+                        ->columnSpan(1)
+                        ->schema([
+                        Forms\Components\Select::make('assigned_to_user_id')
+                            ->relationship('assignedToUser', 'name'),
+                        Forms\Components\Select::make('completed_by_user_id')
+                            ->relationship('completedByUser', 'name'),
+                        Forms\Components\Select::make('approved_by_user_id')
+                            ->relationship('approvedByUser', 'name'),
+                        ]),
                 ]),
             Forms\Components\Actions::make([
                 Forms\Components\Actions\Action::make('startInspection')
