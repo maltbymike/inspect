@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ItemResource\RelationManagers\InspectionTemplatesRelationManager;
+use App\Models\User;
 use App\Traits\HasStandardTableActions;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
@@ -15,7 +16,6 @@ use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use App\Filament\Resources\ItemTemplateResource\Pages;
-use Filament\Resources\RelationManagers\RelationManager;
 
 class ItemTemplateResource extends Resource implements HasShieldPermissions
 {
@@ -34,7 +34,6 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
                 Forms\Components\Select::make('item_id')
                     ->relationship(name: 'item', titleAttribute: 'name')
                     ->disabled()
-
                     ->default(fn (InspectionTemplatesRelationManager $livewire): int => $livewire->getOwnerRecord()->id)
                     ->required(),
                 Forms\Components\Select::make('type_id')
@@ -68,35 +67,40 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                 Tables\Actions\Action::make('Queue Inspection')
-                ->modalContent(view('filament.pages.actions.queue-inspections'))
-                ->modalHeading(false)
-                ->modalSubmitAction(fn (StaticAction $action) => $action->icon('heroicon-o-arrow-left-start-on-rectangle'))
-                ->modalSubmitActionLabel('Queue Inspection')
-                ->extraModalFooterActions(fn (Tables\Actions\Action $action): array => [
-                    $action
-                        ->makeModalSubmitAction('queueInspectionAndView', arguments: ['redirect' => true])
-                        ->label('Queue Inspection and View')
-                        ->color('info')
-                        ->icon('heroicon-m-pencil-square')
-                ])
-                ->action(
-                    function (ItemTemplate $record, array $arguments, $livewire): void {                        
-                        $inspection = new ItemInspection;
-                        if ($livewire instanceof InspectionTemplatesRelationManager) {
-                            $inspection->item_id = $livewire->getOwnerRecord()->id;
-                        } else {
-                            $inspection->item_id = $record->item_id;
-                        }
-                        $inspection->item_template_id = $record->id;
-                        $inspection->save();
+                    ->form([
+                        Forms\Components\Select::make('assigned_to_user_id')
+                            ->label('Assign Inspection To')
+                            ->options(User::permission('update_item::inspection')->pluck('name', 'id')),
+                    ])
+                    ->modalHeading(false)
+                    ->modalSubmitAction(fn (StaticAction $action) => $action->icon('heroicon-o-arrow-left-start-on-rectangle'))
+                    ->modalSubmitActionLabel('Queue Inspection')
+                    ->extraModalFooterActions(fn (Tables\Actions\Action $action): array => [
+                        $action
+                            ->makeModalSubmitAction('queueInspectionAndView', arguments: ['redirect' => true])
+                            ->label('Queue Inspection and View')
+                            ->color('info')
+                            ->icon('heroicon-m-pencil-square')
+                    ])
+                    ->action(
+                        function (ItemTemplate $record, array $arguments, array $data, $livewire): void {                        
+                            $inspection = new ItemInspection;
+                            if ($livewire instanceof InspectionTemplatesRelationManager) {
+                                $inspection->item_id = $livewire->getOwnerRecord()->id;
+                            } else {
+                                $inspection->item_id = $record->item_id;
+                            }
+                            $inspection->item_template_id = $record->id;
+                            $inspection->assigned_to_user_id = $data['assigned_to_user_id'];
+                            $inspection->save();
 
-                        if ($arguments['redirect'] ?? false) {
-                            redirect()->route('filament.admin.resources.item-inspections.edit', ['record' => $inspection->id]);
-                        } else {
-                            redirect(request()->header('Referer'));
-                        }
-                    } 
-                ),
+                            if ($arguments['redirect'] ?? false) {
+                                redirect()->route('filament.admin.resources.item-inspections.edit', ['record' => $inspection->id]);
+                            } else {
+                                redirect(request()->header('Referer'));
+                            }
+                        } 
+                    ),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\ActionGroup::make(
                     Static::StandardTableActions()
