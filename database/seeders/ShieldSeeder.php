@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use BezhanSalleh\FilamentShield\Support\Utils;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
+use BezhanSalleh\FilamentShield\Support\Utils;
 
 class ShieldSeeder extends Seeder
 {
@@ -15,6 +16,13 @@ class ShieldSeeder extends Seeder
         $rolesWithPermissions = '[
             {"name":"super_admin","guard_name":"web","permissions":
                 [
+                    "view_category",
+                    "view_any_category",
+                    "create_category",
+                    "update_category",
+                    "delete_category",
+                    "delete_any_category",
+                
                     "view_item",
                     "view_any_item",
                     "create_item",
@@ -53,6 +61,13 @@ class ShieldSeeder extends Seeder
                     "delete_any_item::template",
                     "force_delete_item::template",
                     "force_delete_any_item::template",
+
+                    "view_item::template::type",
+                    "view_any_item::template::type",
+                    "create_item::template::type",
+                    "update_item::template::type",
+                    "delete_item::template::type",
+                    "delete_any_item::template::type",
                     
                     "view_media",
                     "view_any_media",
@@ -78,8 +93,14 @@ class ShieldSeeder extends Seeder
                     "view_any_user",
                     "create_user",
                     "update_user",
+                    "restore_user",
+                    "restore_any_user",
+                    "replicate_user",
+                    "reorder_user",
                     "delete_user",
                     "delete_any_user",
+                    "force_delete_user",
+                    "force_delete_any_user",
                     
                     "page_ViewItem"
                 ]
