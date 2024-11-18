@@ -162,6 +162,10 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                     ->falseLabel('No')
                     ->nullable()
                     ->default(false),
+                Tables\Filters\SelectFilter::make('AssignedTo')
+                    ->options(User::permission('update_item::inspection')->pluck('name', 'id'))
+                    ->attribute('assigned_to_user_id')
+                    ->default(auth()->user()->id),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
