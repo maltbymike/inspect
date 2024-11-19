@@ -139,61 +139,9 @@ class ListItemInspections extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        return $table
+        return ItemInspectionResource::table($table)
             ->query(ItemInspection::query()->where('item_id', $this->item->id))
-            ->heading('Inspections')
-            ->columns([
-                Tables\Columns\TextColumn::make('itemTemplate.type.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('Created At'))
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('assignedToUser.name')
-                    ->label(__('Assigned To'))
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('started_at')
-                    ->label(__('Started At'))
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('completed_at')
-                    ->label(__('Completed At'))
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('completedByUser.name')
-                    ->label(__('Completed By'))
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('approvedByUser.name')
-                    ->label(__('Approved By'))
-                    ->numeric()
-                    ->sortable(),
-            ])
-            ->filters([
-                TernaryFilter::make('Completed')
-                    ->attribute('completed_at')
-                    ->placeholder('Show All')
-                    ->trueLabel('Yes')
-                    ->falseLabel('No')
-                    ->nullable()
-                    ->default(false),
-            ])
-            ->actions([
-                ViewAction::make()
-                    ->record($this->item)
-                    ->form([
-                        Section::make()
-                            ->columns(2)
-                            ->schema($this->formSchema())
-                ]),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    //
-                ]),
-            ]);
+            ->defaultGroup(false);
     }
 
     public function render(): View

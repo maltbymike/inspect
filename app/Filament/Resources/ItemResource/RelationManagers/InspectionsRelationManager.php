@@ -18,6 +18,7 @@ class InspectionsRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return ItemInspectionResource::table($table);
+        return ItemInspectionResource::table($table)
+            ->defaultGroup(false);
     }
 }
