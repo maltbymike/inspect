@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\ItemInspectionResource\Pages\ListItemInspections;
 use App\Traits\HasStandardTableActions;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
@@ -130,8 +131,6 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                     ->collapsible()
             )
             ->columns([
-                Tables\Columns\TextColumn::make('item.name')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('itemTemplate.type.name')
                     ->label('Inspection Item')
                     ->sortable(),
@@ -161,6 +160,7 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                     ->trueLabel('Yes')
                     ->falseLabel('No')
                     ->nullable()
+                    ->hiddenOn(ListItemInspections::class)
                     ->default(false),
                 Tables\Filters\SelectFilter::make('AssignedTo')
                     ->options(User::permission('update_item::inspection')->pluck('name', 'id'))
