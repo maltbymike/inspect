@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Livewire\Items\ListItemInspectionTemplates;
 use App\Models\User;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
@@ -49,8 +50,8 @@ class QueueInspectionAction extends Action
                 $inspection = new ItemInspection;
                 if ($livewire instanceof InspectionTemplatesRelationManager) {
                     $inspection->item_id = $livewire->getOwnerRecord()->id;
-                } else {
-                    $inspection->item_id = $record->item_id;
+                } else if ($livewire instanceof ListItemInspectionTemplates) {
+                    $inspection->item_id = $livewire->item->id;
                 }
                 $inspection->item_template_id = $record->id;
                 $inspection->assigned_to_user_id = $data['assigned_to_user_id'];
