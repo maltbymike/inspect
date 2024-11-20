@@ -51,6 +51,7 @@ class ItemResource extends Resource implements HasShieldPermissions
         return [
             'index' => Pages\ListItems::route('/'),
             'create' => Pages\CreateItem::route('/create'),
+            'view' => Pages\ViewItem::route('/{record}'),
             'edit' => Pages\EditItem::route('/{record}/edit'),
             'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];

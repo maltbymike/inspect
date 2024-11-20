@@ -16,7 +16,8 @@ class EditItem extends EditRecord
         return [
             Actions\Action::make('view')
                 ->disabled(fn (Item $record) => $record->trashed())
-                ->url(route('filament.admin.pages.items.view', ['id' => $this->record])),
+                ->url(route('filament.admin.resources.items.view', ['record' => $this->record])),
+                // ->url(route('filament.admin.pages.items.view', ['id' => $this->record])),
             Actions\DeleteAction::make()
                 ->label('Make Inactive'),
             Actions\RestoreAction::make()

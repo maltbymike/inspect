@@ -53,11 +53,13 @@ class ItemTemplateResource extends Resource implements HasShieldPermissions
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('item.reference')
+                    ->label(__('Reference'))
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('item.name')
-                    ->numeric()
+                    ->label(__('Inspection From Item'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type.name')
-                    ->numeric()
                     ->sortable(),
             ])
             ->filters([
