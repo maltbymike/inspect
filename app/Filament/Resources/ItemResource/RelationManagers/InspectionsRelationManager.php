@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\ItemResource\RelationManagers;
 
-use App\Filament\Resources\ItemInspectionResource;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Filament\Resources\ItemInspectionResource;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class InspectionsRelationManager extends RelationManager
@@ -18,7 +18,6 @@ class InspectionsRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return ItemInspectionResource::table($table)
-            ->defaultGroup(false);
+        return ItemInspectionResource::table($table);
     }
 }

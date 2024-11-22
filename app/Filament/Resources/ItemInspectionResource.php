@@ -2,9 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ItemInspectionResource\Pages\ListItemInspections;
-use App\Traits\HasStandardTableActions;
-use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -12,11 +9,15 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\HtmlString;
 use Filament\Tables\Grouping\Group;
+use App\Traits\HasStandardTableActions;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
+use Filament\Tables\Columns\Summarizers\Average;
 use App\Filament\Resources\ItemInspectionResource\Pages;
-use Illuminate\Support\HtmlString;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+use App\Filament\Resources\ItemInspectionResource\Pages\ListItemInspections;
 
 class ItemInspectionResource extends Resource implements HasShieldPermissions
 {
@@ -124,27 +125,38 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultGroup(
+            ->defaultGroup('item.id')
+            ->groups([
                 Group::make('item.id')
                     ->titlePrefixedWithLabel(false)
                     ->getTitleFromRecordUsing(fn (ItemInspection $record): string => $record->item->reference . ": " . $record->item->name)
-                    ->collapsible()
-            )
+                    ->collapsible(),
+                Group::make('completedByUser.id')
+                    ->getTitleFromRecordUsing(fn (ItemInspection $record): string => !is_null($record->completedByUser) ? $record->completedByUser->name : '')
+                    ->collapsible(),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('itemTemplate.type.name')
                     ->label('Inspection Item')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Created At'))
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('assignedToUser.name')
                     ->label(__('Assigned To'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('started_at')
+                    ->label(__('Started At'))
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('completed_at')
+                    ->label(__('Completed At'))
                     ->dateTime()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('inspection_time_in_minutes')
+                    ->label(__('Inspection Time'))
+                    ->summarize(Average::make())
                     ->sortable(),
                 Tables\Columns\TextColumn::make('completedByUser.name')
                     ->label(__('Completed By'))
