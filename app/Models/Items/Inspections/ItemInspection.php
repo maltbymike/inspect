@@ -19,6 +19,14 @@ class ItemInspection extends Model
 
     protected $table = 'item_item_inspection';
 
+    protected function casts(): array
+    {
+        return [
+            'started_at' => 'datetime',
+            'completed_at' => 'datetime',
+        ];
+    }
+
     public function approvedByUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by_user_id');
