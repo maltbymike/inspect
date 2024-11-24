@@ -131,11 +131,29 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                     ->titlePrefixedWithLabel(false)
                     ->getTitleFromRecordUsing(fn (ItemInspection $record): string => $record->item->reference . ": " . $record->item->name)
                     ->collapsible(),
+                Group::make('item.parent_id')
+                    ->label('Item Group')
+                    ->titlePrefixedWithLabel(false)
+                    ->getTitleFromRecordUsing(function (ItemInspection $record): string  
+                        {
+                            return is_null($record->item->parent) 
+                                ? $record->item->reference . ": " . $record->item->name
+                                : $record->item->parent->reference . ": " . $record->item->parent->name;
+                        }
+                    )
+                    ->collapsible(),
+                Group::make('itemTemplate.id')
+                    ->titlePrefixedWithLabel(false)
+                    ->getTitleFromRecordUsing(fn (ItemInspection $record): string => $record->itemTemplate->type->name)
+                    ->collapsible(),
                 Group::make('completedByUser.id')
                     ->getTitleFromRecordUsing(fn (ItemInspection $record): string => !is_null($record->completedByUser) ? $record->completedByUser->name : '')
                     ->collapsible(),
             ])
             ->columns([
+                Tables\Columns\TextColumn::make('item.reference')
+                    ->label('Item')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('itemTemplate.type.name')
                     ->label('Inspection Item')
                     ->sortable(),
@@ -178,6 +196,12 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                     ->options(User::permission('update_item::inspection')->pluck('name', 'id'))
                     ->attribute('assigned_to_user_id')
                     ->default(auth()->user()->id),
+                Tables\Filters\SelectFilter::make('Item')
+                    ->relationship('item', 'reference'),
+                Tables\Filters\SelectFilter::make('Item Group')
+                    ->relationship('item.parent', 'reference'),
+                Tables\Filters\SelectFilter::make('Inspection Type')
+                    ->relationship('itemTemplate.type', 'name')
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
