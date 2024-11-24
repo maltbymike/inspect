@@ -25,6 +25,7 @@ class InspectionTemplatesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
-        return ItemTemplateResource::table($table);
+        return ItemTemplateResource::table($table)
+            ->query(ItemTemplate::query()->whereIn('item_id', $this->getOwnerRecord()->ancestorsAndSelf()->pluck('id')));
     }
 }

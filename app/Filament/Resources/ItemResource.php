@@ -51,6 +51,7 @@ class ItemResource extends Resource implements HasShieldPermissions
         return [
             'index' => Pages\ListItems::route('/'),
             'create' => Pages\CreateItem::route('/create'),
+            'view' => Pages\ViewItem::route('/{record}'),
             'edit' => Pages\EditItem::route('/{record}/edit'),
             'edit-history' => Pages\EditHistory::route('/{record}/edit/history'),
         ];
@@ -79,7 +80,7 @@ class ItemResource extends Resource implements HasShieldPermissions
     {
         return $table
             ->recordClasses(fn (Item $record) => $record->trashed() ? 'bg-danger-100' : '')
-            ->recordUrl(fn (Item $record) => $record->trashed() ? null : route('filament.admin.pages.items.view', ['id' => $record->id]))
+            ->recordUrl(fn (Item $record) => $record->trashed() ? null : route('filament.admin.resources.items.view', ['record' => $record->id]))
             ->columns([
                 Tables\Columns\TextColumn::make('reference')
                     ->searchable(),
@@ -106,7 +107,7 @@ class ItemResource extends Resource implements HasShieldPermissions
                     ->icon('heroicon-m-eye')
                     ->color('gray')
                     ->disabled(fn ($record) => $record->trashed())
-                    ->url(fn ($record): string => route('filament.admin.pages.items.view', ['id' => $record->id] )),
+                    ->url(fn ($record): string => route('filament.admin.resources.items.view', ['record' => $record->id] )),
                 Tables\Actions\ActionGroup::make(
                     Static::StandardTableActions(hasSoftDeleteActions: true),
                 ),
