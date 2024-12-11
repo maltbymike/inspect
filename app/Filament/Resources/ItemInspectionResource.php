@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\User;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
@@ -56,19 +57,43 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                         Forms\Components\Select::make('approved_by_user_id')
                             ->relationship('approvedByUser', 'name'),
                         ]),
+                    Forms\Components\Fieldset::make('Meter Readings')
+                        ->columnSpan(1)
+                        ->relationship('meter')
+                        ->schema([
+                            Forms\Components\TextInput::make('meter_start')
+                                ->label(__('Meter Start')),
+                            Forms\Components\TextInput::make('meter_end')
+                                ->label(__('Meter End')),
+                        ])
                 ]),
             Forms\Components\Actions::make([
                 Forms\Components\Actions\Action::make('startInspection')
-                    ->color('success')
-                    ->label(__('Start Inspection'))
-                    ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsStarted())
-                    ->action(
-                        function (ItemInspection $record, Set $set): void {
+                    ->action(function (array $data, ItemInspection $record, Set $set): void {
                             $record->started_at = now();
+                            array_key_exists('meterStart', $data) 
+                                ? $record->meter()->create([
+                                    'item_id' => $record->item_id,
+                                    'meter_start' => $data['meterStart'],
+                                ])
+                                : null;
                             $record->save();
                             $set('started_at', now()->toDateTimeString());
                         } 
-                    ),
+                    )
+                    ->color('success')
+                    ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsStarted())
+                    ->form(function (ItemInspection $record) {
+                        if ($record->item->has_inspection_meter) {
+                            return [
+                                TextInput::make('meterStart')
+                                    ->label(__('Meter Reading'))
+                                    ->required(),
+                            ]; 
+                        }
+                    }
+                    )
+                    ->label(__('Start Inspection'))
             ])
             ->columnSpanFull()
             ->fullWidth(),
@@ -97,16 +122,27 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                             $record->inspectionIsStarted()
                     )
                     ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsCompleted())
-                    ->form([
-                        Forms\Components\Select::make('completed_by')
-                            ->options(User::query()->pluck('name', 'id'))
-                            ->required(),
-                    ])
+                    ->form(function (ItemInspection $record) {
+                        if ($record->item->has_inspection_meter) {
+                            $returnArray[] = TextInput::make('meterEnd')
+                                                ->label(__('Meter Reading'))
+                                                ->required();
+                        }
+
+                        $returnArray[] = Forms\Components\Select::make('completed_by')
+                                ->options(User::query()->pluck('name', 'id'))
+                                ->required();
+                        
+                        return $returnArray;
+                    })
                     ->action(
                         function (array $data, ItemInspection $record, Set $set): void {
                             $record->completed_at = now();
+                            array_key_exists('meterEnd', $data) 
+                                ? $record->meter->meter_end = $data['meterEnd']
+                                : null;
                             $record->completedByUser()->associate($data['completed_by']);
-                            $record->save();
+                            $record->push();
                             $set('completed_at', now()->toDateTimeString());
                         } 
                     ),
@@ -175,6 +211,12 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('inspection_time_in_minutes')
                     ->label(__('Inspection Time'))
                     ->summarize(Average::make())
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('meter.meter_start')
+                    ->label(__('Meter Start'))
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('meter.meter_end')
+                    ->label(__('Meter End'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('completedByUser.name')
                     ->label(__('Completed By'))
