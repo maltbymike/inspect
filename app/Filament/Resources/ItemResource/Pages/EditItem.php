@@ -11,6 +11,11 @@ class EditItem extends EditRecord
 {
     protected static string $resource = ItemResource::class;
 
+    public function getContentTabLabel(): string|null
+    {
+        return 'Details';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -24,5 +29,10 @@ class EditItem extends EditRecord
                 ->label('Make Active')
                 ->color('success'),
         ];
+    }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
     }
 }

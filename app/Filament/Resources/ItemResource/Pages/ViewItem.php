@@ -13,6 +13,11 @@ class ViewItem extends ViewRecord
 {
     protected static string $resource = ItemResource::class;
 
+    public function getContentTabLabel(): string|null
+    {
+        return 'Details';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -20,6 +25,11 @@ class ViewItem extends ViewRecord
                 ->disabled(fn () => ! auth()->user()->can('update_item'))
                 ->url(route('filament.admin.resources.items.edit', ['record' => $this->record])),
         ];
+    }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
     }
 
     public function infolist(Infolist $infolist): Infolist
