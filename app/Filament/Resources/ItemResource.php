@@ -2,13 +2,16 @@
 
 namespace App\Filament\Resources;
 
-use App\Traits\HasStandardTableActions;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Toggle;
 use Filament\Tables;
 use Filament\Forms\Form;
 use App\Models\Items\Item;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Traits\HasStandardTableActions;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ItemResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,10 +34,18 @@ class ItemResource extends Resource implements HasShieldPermissions
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('reference')
-                    ->required(),
-                Forms\Components\TextInput::make('name')
-                    ->required(),
+                Fieldset::make('Item Details')
+                    ->schema([
+                        TextInput::make('reference')
+                            ->required(),
+                        TextInput::make('name')
+                            ->required(),
+                    ]),
+                Fieldset::make('Item Attributes')
+                    ->schema([
+                        Toggle::make('has_inspection_meter')
+                            ->label(__('Has Inspection Meter')),
+                    ]),
             ]);
     }
 
@@ -69,7 +80,7 @@ class ItemResource extends Resource implements HasShieldPermissions
                 RelationManagers\InspectionsRelationManager::class,
                 RelationManagers\InspectionTemplatesRelationManager::class,
             ]),
-            RelationGroup::make('Item Information', [
+            RelationGroup::make('Item Heirarchy', [
                 RelationManagers\CategoriesRelationManager::class,
                 RelationManagers\ChildrenRelationManager::class,
             ]),
