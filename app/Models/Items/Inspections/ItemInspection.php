@@ -2,8 +2,10 @@
 
 namespace App\Models\Items\Inspections;
 
+use App\Models\Items\Meter;
 use App\Models\User;
 use App\Models\Items\Item;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -76,6 +78,11 @@ class ItemInspection extends Model
     public function itemTemplate(): BelongsTo
     {
         return $this->belongsTo(ItemTemplate::class);
+    }
+
+    public function meter(): MorphOne
+    {
+        return $this->morphOne(Meter::class, 'meterable');
     }
 
 }

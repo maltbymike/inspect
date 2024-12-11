@@ -21,6 +21,10 @@ class Item extends Model
     use LogsActivity;
     use SoftDeletes;
 
+    protected $casts = [
+        'has_inspection_meter' => 'boolean',
+    ];
+
     protected $guarded = [];
 
     public function categories(): BelongsToMany
@@ -54,6 +58,11 @@ class Item extends Model
     public function inspectionTemplates(): HasMany
     {
         return $this->hasMany(ItemTemplate::class);
+    }
+
+    public function meters(): HasMany
+    {
+        return $this->hasMany(Meter::class);
     }
 
     public function types(): BelongsToMany
