@@ -43,6 +43,14 @@ class Item extends Model
             ->logUnguarded();
     }
 
+    public function getLastMeterReading(): string
+    {
+        return max([
+            $this->meters->last()->meter_end, 
+            $this->meters->last()->meter_start
+        ]);
+    }
+
     public function getParentKeyName(): string
     {
         return 'parent_id';
