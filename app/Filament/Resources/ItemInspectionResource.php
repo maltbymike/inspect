@@ -142,6 +142,8 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                                 TextInput::make('meterEnd')
                                     ->label(__('Meter Reading'))
                                     ->required()
+                                    ->numeric()
+                                    ->step(.1)
                                     ->hintAction(
                                         Action::make('copyMeterStartToMeterEnd')
                                             ->label(fn (ItemInspection $record): string => 'Use Current Reading: ' . $record->meter->meter_start)
