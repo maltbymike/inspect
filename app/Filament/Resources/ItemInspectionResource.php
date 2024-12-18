@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\User;
-use Filament\Forms\Components\TextInput;
 use Filament\Tables;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
@@ -13,6 +12,8 @@ use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Grouping\Group;
 use App\Traits\HasStandardTableActions;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Actions\Action;
 use App\Models\Items\Inspections\ItemTemplate;
 use App\Models\Items\Inspections\ItemInspection;
 use Filament\Tables\Columns\Summarizers\Average;
@@ -124,9 +125,17 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                     ->disabled(fn (ItemInspection $record): bool => $record->inspectionIsCompleted())
                     ->form(function (ItemInspection $record) {
                         if ($record->item->has_inspection_meter) {
-                            $returnArray[] = TextInput::make('meterEnd')
-                                                ->label(__('Meter Reading'))
-                                                ->required();
+                            $returnArray[] = 
+                                TextInput::make('meterEnd')
+                                    ->label(__('Meter Reading'))
+                                    ->required()
+                                    ->hintAction(
+                                        Action::make('copyMeterStartToMeterEnd')
+                                            ->label(fn (ItemInspection $record): string => 'Use Current Reading: ' . $record->meter->meter_start)
+                                            ->action(function (Set $set, ItemInspection $record) {
+                                                $set('meterEnd', $record->meter->meter_start);    
+                                            })
+                                    );
                         }
 
                         $returnArray[] = Forms\Components\Select::make('completed_by')
