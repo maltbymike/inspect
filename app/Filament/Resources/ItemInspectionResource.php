@@ -72,12 +72,14 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                 Forms\Components\Actions\Action::make('startInspection')
                     ->action(function (array $data, ItemInspection $record, Set $set): void {
                             $record->started_at = now();
-                            array_key_exists('meterStart', $data) 
-                                ? $record->meter()->create([
+                            if (array_key_exists('meterStart', $data) )
+                            {
+                                $record->meter()->create([
                                     'item_id' => $record->item_id,
                                     'meter_start' => $data['meterStart'],
-                                ])
-                                : null;
+                                ]);
+                            }
+                            
                             $record->save();
                             $set('started_at', now()->toDateTimeString());
                         } 
@@ -89,7 +91,18 @@ class ItemInspectionResource extends Resource implements HasShieldPermissions
                             return [
                                 TextInput::make('meterStart')
                                     ->label(__('Meter Reading'))
-                                    ->required(),
+                                    ->numeric()
+                                    ->step(.1)
+                                    ->required()
+                                    ->hintAction(
+                                        Action::make('copyLastMeterToMeterStart')
+                                            ->label(function (ItemInspection $record) {
+                                                return 'Use Current Reading: ' . $record->item->getLastMeterReading();
+                                            })
+                                            ->action(function (Set $set, ItemInspection $record) {
+                                                $set('meterStart', $record->item->getLastMeterReading());    
+                                            })
+                                    ),
                             ]; 
                         }
                     }
